@@ -1,0 +1,5613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#6c3cff" />
+  <title>Mixh Hunts | Find It. Love It. Get It.</title>
+
+  <style>
+    :root {
+      --purple: #6c3cff;
+      --purple-dark: #4f25d8;
+      --blue: #2563eb;
+      --pink: #ec4899;
+      --orange: #ff8a00;
+      --green: #16a765;
+      --yellow: #ffd43b;
+
+      --text: #201b2d;
+      --muted: #777183;
+      --bg: #f7f7fc;
+      --white: #ffffff;
+      --border: #e9e6f1;
+
+      --shadow: 0 15px 40px rgba(50, 35, 100, 0.10);
+      --shadow-hover: 0 22px 50px rgba(80, 45, 180, 0.17);
+
+      --radius: 22px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    /* =========================
+       TOP BAR
+    ========================= */
+
+    .top-bar {
+      background: linear-gradient(
+        90deg,
+        var(--purple),
+        var(--pink),
+        var(--orange),
+        var(--pink),
+        var(--purple)
+      );
+      background-size: 250% 100%;
+      color: white;
+      text-align: center;
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+      overflow: hidden;
+      animation: topBarGradient 8s ease-in-out infinite;
+    }
+
+    .top-bar-content {
+      display: inline-block;
+      animation: topBarFloat 4s ease-in-out infinite;
+      will-change: transform;
+    }
+
+    @keyframes topBarGradient {
+      0%, 100% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+    }
+
+    @keyframes topBarFloat {
+      0%, 100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-2px);
+      }
+    }
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      max-width: 1250px;
+      margin: auto;
+      min-height: 76px;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .logo {
+      min-width: max-content;
+      font-size: 25px;
+      font-weight: 950;
+      letter-spacing: -1.2px;
+      background: linear-gradient(90deg, var(--purple), var(--pink), var(--orange));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .logo span {
+      color: var(--text);
+    }
+
+    .search-wrap {
+      flex: 1;
+      position: relative;
+      max-width: 650px;
+      margin: auto;
+    }
+
+    .search-wrap input {
+      width: 100%;
+      border: 2px solid #eeeaf7;
+      border-radius: 999px;
+      padding: 14px 48px 14px 18px;
+      outline: none;
+      background: #faf9fd;
+      transition: 0.25s ease;
+    }
+
+    .search-wrap input:focus {
+      border-color: var(--purple);
+      background: white;
+      box-shadow: 0 0 0 4px rgba(108,60,255,0.09);
+    }
+
+    .search-icon {
+      position: absolute;
+      right: 17px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 18px;
+      pointer-events: none;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .header-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 11px 15px;
+      font-weight: 800;
+      background: #f2efff;
+      color: var(--purple);
+      transition: 0.25s ease;
+    }
+
+    .header-btn:hover {
+      transform: translateY(-2px);
+      background: #e8e1ff;
+    }
+
+    .whatsapp-btn {
+      background: #20bd67;
+      color: white;
+    }
+
+    .whatsapp-btn:hover {
+      background: #16a75a;
+    }
+
+    .cart-btn {
+      position: relative;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -5px;
+      right: -3px;
+      width: 21px;
+      height: 21px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--pink);
+      color: white;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    /* =========================
+       NAV
+    ========================= */
+
+    .nav-row {
+      border-top: 1px solid #f1eef6;
+      background: white;
+    }
+
+    .nav-inner {
+      max-width: 1250px;
+      margin: auto;
+      padding: 10px 20px;
+      display: flex;
+      gap: 9px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .nav-inner::-webkit-scrollbar {
+      display: none;
+    }
+
+    .category-btn {
+      white-space: nowrap;
+      border: 1px solid var(--border);
+      background: white;
+      padding: 9px 14px;
+      border-radius: 999px;
+      font-weight: 750;
+      color: #554f62;
+      transition: 0.25s ease;
+    }
+
+    .category-btn:hover,
+    .category-btn.active {
+      background: var(--purple);
+      color: white;
+      border-color: var(--purple);
+      transform: translateY(-1px);
+    }
+
+    /* =========================
+       HERO
+    ========================= */
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(255,255,255,.3), transparent 22%),
+        radial-gradient(circle at 85% 80%, rgba(255,255,255,.25), transparent 25%),
+        linear-gradient(120deg, #6c3cff, #8b45ff 42%, #ec4899 75%, #ff8a00);
+      color: white;
+      padding: 75px 20px 90px;
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.09);
+      animation: floatBlob 9s ease-in-out infinite alternate;
+    }
+
+    .hero::before {
+      width: 300px;
+      height: 300px;
+      top: -120px;
+      right: 5%;
+    }
+
+    .hero::after {
+      width: 220px;
+      height: 220px;
+      bottom: -100px;
+      left: 5%;
+      animation-delay: 2s;
+    }
+
+    @keyframes floatBlob {
+      from {
+        transform: translate(0, 0) rotate(0deg);
+      }
+
+      to {
+        transform: translate(25px, 20px) rotate(12deg);
+      }
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      max-width: 1250px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      align-items: center;
+      gap: 45px;
+    }
+
+    .hero-content {
+      max-width: 700px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(255,255,255,.17);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 999px;
+      padding: 8px 13px;
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 18px;
+    }
+
+    .hero h1 {
+      font-size: clamp(43px, 7vw, 78px);
+      line-height: 0.98;
+      letter-spacing: -4px;
+      margin-bottom: 22px;
+    }
+
+    /* IMPORTANT:
+       Only actual letters animate.
+       Words and spaces have their own layout elements.
+    */
+
+    .hero h1 .hero-word {
+      display: inline-block;
+      white-space: nowrap;
+    }
+
+    .hero h1 .hero-letter {
+      display: inline-block;
+      animation: letterFloat 3.5s ease-in-out infinite;
+      will-change: transform;
+    }
+
+    .hero h1 .hero-space {
+      display: inline-block;
+      width: 0.32em;
+      min-width: 0.32em;
+    }
+
+    @keyframes letterFloat {
+      0%, 100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-5px);
+      }
+    }
+
+    .hero p {
+      max-width: 600px;
+      font-size: 18px;
+      line-height: 1.7;
+      color: rgba(255,255,255,.9);
+      margin-bottom: 30px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .hero-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 14px 20px;
+      font-weight: 850;
+      transition: 0.25s ease;
+    }
+
+    .hero-btn.primary {
+      background: white;
+      color: var(--purple);
+    }
+
+    .hero-btn.secondary {
+      background: rgba(255,255,255,.15);
+      color: white;
+      border: 1px solid rgba(255,255,255,.3);
+    }
+
+    .hero-btn:hover {
+      transform: translateY(-3px) scale(1.02);
+    }
+
+    .hero-showcase {
+      min-height: 330px;
+      position: relative;
+    }
+
+    .floating-card {
+      position: absolute;
+      width: 175px;
+      min-height: 125px;
+      background: rgba(255,255,255,.94);
+      color: var(--text);
+      border-radius: 25px;
+      padding: 18px;
+      box-shadow: 0 25px 55px rgba(44,20,100,.22);
+      animation: cardFloat 5s ease-in-out infinite;
+    }
+
+    .floating-card:nth-child(1) {
+      top: 15px;
+      left: 10px;
+    }
+
+    .floating-card:nth-child(2) {
+      top: 105px;
+      right: 5px;
+      animation-delay: 1s;
+    }
+
+    .floating-card:nth-child(3) {
+      bottom: 0;
+      left: 95px;
+      animation-delay: 2s;
+    }
+
+    @keyframes cardFloat {
+      0%,100% {
+        transform: translateY(0) rotate(-2deg);
+      }
+
+      50% {
+        transform: translateY(-14px) rotate(2deg);
+      }
+    }
+
+    .floating-icon {
+      font-size: 38px;
+      margin-bottom: 9px;
+    }
+
+    .floating-card strong {
+      display: block;
+      font-size: 16px;
+    }
+
+    .floating-card small {
+      color: var(--muted);
+    }
+
+    /* =========================
+       MAIN
+    ========================= */
+
+    main {
+      max-width: 1250px;
+      margin: auto;
+      padding: 55px 20px;
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+
+    .section-heading h2 {
+      font-size: 31px;
+      letter-spacing: -1.3px;
+    }
+
+    .section-heading p {
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    /* =========================
+       CATEGORIES
+    ========================= */
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 14px;
+      margin-bottom: 70px;
+    }
+
+    .category-card {
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: 20px;
+      padding: 22px 12px;
+      text-align: center;
+      box-shadow: 0 8px 25px rgba(40,30,80,.05);
+      transition: .3s ease;
+      cursor: pointer;
+    }
+
+    .category-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .category-icon {
+      font-size: 35px;
+      margin-bottom: 9px;
+    }
+
+    .category-card strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .category-card small {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    /* =========================
+       DEAL BANNER
+    ========================= */
+
+    .deal-banner {
+      margin-bottom: 65px;
+      border-radius: 28px;
+      padding: 32px;
+      color: white;
+      background:
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,.25), transparent 25%),
+        linear-gradient(110deg, var(--orange), var(--pink), var(--purple));
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .deal-banner h2 {
+      font-size: 28px;
+      margin-bottom: 6px;
+    }
+
+    .deal-banner p {
+      opacity: .9;
+    }
+
+    .deal-btn {
+      border: none;
+      background: white;
+      color: var(--purple);
+      border-radius: 999px;
+      padding: 13px 18px;
+      font-weight: 900;
+      white-space: nowrap;
+      transition: .25s ease;
+    }
+
+    .deal-btn:hover {
+      transform: scale(1.04);
+    }
+
+    /* =========================
+       NEWSLETTER
+    ========================= */
+
+    .newsletter {
+      margin-bottom: 65px;
+      border-radius: 28px;
+      padding: 35px;
+      color: white;
+      background:
+        radial-gradient(circle at 85% 15%, rgba(255,255,255,.24), transparent 25%),
+        linear-gradient(115deg, var(--purple), var(--pink), var(--orange));
+      position: relative;
+      overflow: hidden;
+    }
+
+    .newsletter-content {
+      position: relative;
+      z-index: 2;
+      max-width: 760px;
+    }
+
+    .newsletter h2 {
+      font-size: 28px;
+      margin-bottom: 7px;
+    }
+
+    .newsletter p {
+      opacity: .92;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .newsletter-form {
+      display: flex;
+      gap: 10px;
+      max-width: 650px;
+    }
+
+    .newsletter-form input {
+      flex: 1;
+      min-width: 0;
+      border: none;
+      outline: none;
+      border-radius: 999px;
+      padding: 14px 17px;
+      background: white;
+      color: var(--text);
+    }
+
+    .newsletter-form button {
+      border: none;
+      border-radius: 999px;
+      padding: 14px 20px;
+      background: white;
+      color: var(--purple);
+      font-weight: 900;
+      white-space: nowrap;
+      transition: .25s ease;
+    }
+
+    .newsletter-form button:hover {
+      transform: translateY(-2px);
+    }
+
+    .newsletter-form button:disabled {
+      opacity: .65;
+      cursor: wait;
+    }
+
+    .newsletter-message {
+      margin-top: 11px;
+      min-height: 18px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    /* =========================
+       PRODUCT AREA
+    ========================= */
+
+    .product-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 22px;
+    }
+
+    .result-count {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .sort-select {
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: 12px;
+      padding: 10px 13px;
+      outline: none;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .product-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 9px 28px rgba(40,30,80,.055);
+      transition: .3s ease;
+      animation: productAppear .55s ease both;
+    }
+
+    @keyframes productAppear {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .product-card:hover {
+      transform: translateY(-7px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .product-image {
+      height: 220px;
+      background:
+        radial-gradient(circle at 50% 35%, rgba(108,60,255,.14), transparent 40%),
+        #f6f4fb;
+      display: grid;
+      place-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .45s ease;
+    }
+
+    .product-card:hover .product-image img {
+      transform: scale(1.055);
+    }
+
+    .placeholder-icon {
+      font-size: 70px;
+    }
+
+    .badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      z-index: 2;
+      background: var(--purple);
+      color: white;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .stock-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 2;
+      background: white;
+      color: var(--green);
+      border-radius: 999px;
+      padding: 6px 9px;
+      font-size: 10px;
+      font-weight: 900;
+      box-shadow: 0 5px 15px rgba(0,0,0,.07);
+    }
+
+    .stock-badge.out {
+      color: #d63636;
+    }
+
+    .product-info {
+      padding: 17px;
+    }
+
+    .product-category {
+      color: var(--purple);
+      text-transform: uppercase;
+      letter-spacing: .7px;
+      font-size: 10px;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+
+    .product-name {
+      font-size: 17px;
+      font-weight: 900;
+      margin-bottom: 7px;
+    }
+
+    .product-description {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+      min-height: 40px;
+      margin-bottom: 12px;
+    }
+
+    .variant-line {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 13px;
+    }
+
+    .variant-pill {
+      background: #f3f1f9;
+      color: #5b5468;
+      padding: 5px 8px;
+      border-radius: 7px;
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .product-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .price {
+      font-size: 18px;
+      font-weight: 950;
+      color: var(--text);
+    }
+
+    .price.contact {
+      font-size: 14px;
+      color: var(--purple);
+    }
+
+    .add-cart {
+      width: 100%;
+      border: none;
+      background: var(--purple);
+      color: white;
+      padding: 11px;
+      border-radius: 12px;
+      font-weight: 900;
+      transition: .25s ease;
+    }
+
+    .add-cart:hover {
+      background: var(--purple-dark);
+      transform: translateY(-2px);
+    }
+
+    .add-cart:disabled {
+      cursor: not-allowed;
+      background: #c9c6d2;
+    }
+
+    .whatsapp-product {
+      display: block;
+      text-align: center;
+      margin-top: 8px;
+      padding: 9px;
+      border-radius: 11px;
+      background: #ebfff4;
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 900;
+      transition: .25s ease;
+    }
+
+    .whatsapp-product:hover {
+      background: #d8fae8;
+    }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 60px 20px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+    }
+
+    .empty-state div {
+      font-size: 45px;
+      margin-bottom: 10px;
+    }
+
+    .empty-state p {
+      color: var(--muted);
+      margin: 7px 0 18px;
+    }
+
+    .empty-state button {
+      border: none;
+      background: var(--purple);
+      color: white;
+      padding: 11px 17px;
+      border-radius: 999px;
+      font-weight: 800;
+    }
+
+    /* =========================
+       LOADING / ERROR
+    ========================= */
+
+    .loading-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 70px 20px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+    }
+
+    .loading-spinner {
+      width: 45px;
+      height: 45px;
+      margin: 0 auto 15px;
+      border: 4px solid #ece8f7;
+      border-top-color: var(--purple);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .loading-state p,
+    .error-state p {
+      color: var(--muted);
+      margin-top: 7px;
+    }
+
+    .error-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 60px 20px;
+      background: white;
+      border: 1px solid #f0dcdc;
+      border-radius: 24px;
+    }
+
+    .error-state .error-icon {
+      font-size: 45px;
+      margin-bottom: 10px;
+    }
+
+    .error-state button {
+      margin-top: 18px;
+      border: none;
+      background: var(--purple);
+      color: white;
+      padding: 11px 18px;
+      border-radius: 999px;
+      font-weight: 900;
+    }
+
+    /* =========================
+       WHY MIXH
+    ========================= */
+
+    .why-section {
+      margin-top: 75px;
+    }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .why-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 21px;
+      padding: 24px;
+      transition: .3s ease;
+    }
+
+    .why-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow);
+    }
+
+    .why-icon {
+      font-size: 31px;
+      margin-bottom: 13px;
+    }
+
+    .why-card h3 {
+      margin-bottom: 7px;
+      font-size: 16px;
+    }
+
+    .why-card p {
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 13px;
+    }
+
+    /* =========================
+       SUPPORT
+    ========================= */
+
+    .support {
+      margin-top: 60px;
+      border-radius: 28px;
+      padding: 38px;
+      background: linear-gradient(110deg, #eef2ff, #fff0f8, #fff7e8);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 25px;
+    }
+
+    .support h2 {
+      margin-bottom: 7px;
+    }
+
+    .support p {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .support-btn {
+      background: #20bd67;
+      color: white;
+      border: none;
+      padding: 14px 19px;
+      border-radius: 999px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    /* =========================
+       CART DRAWER
+    ========================= */
+
+    .cart-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(20,15,35,.4);
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: .3s ease;
+    }
+
+    .cart-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .cart-drawer {
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
+      width: min(440px, 100%);
+      background: white;
+      transform: translateX(100%);
+      transition: .35s ease;
+      display: flex;
+      flex-direction: column;
+      box-shadow: -20px 0 60px rgba(20,15,35,.15);
+    }
+
+    .cart-overlay.open .cart-drawer {
+      transform: translateX(0);
+    }
+
+    .cart-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cart-header h2 {
+      font-size: 21px;
+    }
+
+    .close-cart {
+      width: 37px;
+      height: 37px;
+      border: none;
+      border-radius: 50%;
+      background: #f3f1f8;
+      font-size: 20px;
+    }
+
+    .cart-items {
+      flex: 1;
+      overflow-y: auto;
+      padding: 15px;
+    }
+
+    .cart-empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--muted);
+    }
+
+    .cart-empty-icon {
+      font-size: 55px;
+      margin-bottom: 10px;
+    }
+
+    .cart-item {
+      display: grid;
+      grid-template-columns: 65px 1fr auto;
+      gap: 11px;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #f0edf5;
+    }
+
+    .cart-item-image {
+      width: 65px;
+      height: 65px;
+      border-radius: 13px;
+      background: #f5f3fa;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      font-size: 29px;
+    }
+
+    .cart-item-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .cart-item-name {
+      font-weight: 850;
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    .cart-item-price {
+      color: var(--purple);
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 7px;
+    }
+
+    .qty-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .qty-controls button {
+      width: 25px;
+      height: 25px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: white;
+      font-weight: 900;
+    }
+
+    .remove-item {
+      border: none !important;
+      color: #d64545;
+      background: transparent !important;
+      font-size: 11px;
+      width: auto !important;
+      padding: 0 4px;
+    }
+
+    .cart-footer {
+      border-top: 1px solid var(--border);
+      padding: 18px;
+    }
+
+    .cart-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 13px;
+    }
+
+    .cart-total strong {
+      font-size: 20px;
+    }
+
+    .checkout-btn {
+      width: 100%;
+      border: none;
+      background: #20bd67;
+      color: white;
+      padding: 14px;
+      border-radius: 13px;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    .clear-cart {
+      width: 100%;
+      border: none;
+      background: #f2eff6;
+      color: #665f70;
+      padding: 11px;
+      border-radius: 13px;
+      font-weight: 800;
+    }
+
+    /* =========================
+       TOAST
+    ========================= */
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 25px;
+      transform: translate(-50%, 30px);
+      background: #24202e;
+      color: white;
+      padding: 12px 17px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 800;
+      z-index: 3000;
+      opacity: 0;
+      pointer-events: none;
+      transition: .3s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    /* =========================
+       FOOTER
+    ========================= */
+
+    footer {
+      background: white;
+      border-top: 1px solid var(--border);
+      margin-top: 70px;
+    }
+
+    .footer-inner {
+      max-width: 1250px;
+      margin: auto;
+      padding: 35px 20px;
+      display: flex;
+      justify-content: space-between;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .footer-brand {
+      max-width: 400px;
+    }
+
+    .footer-brand .logo {
+      display: inline-block;
+      margin-bottom: 9px;
+    }
+
+    .footer-brand p {
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 13px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding: 17px 20px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media (max-width: 1050px) {
+      .products-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .category-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .why-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .hero-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-showcase {
+        max-width: 500px;
+        width: 100%;
+        margin: auto;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .header-inner {
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .logo {
+        font-size: 22px;
+      }
+
+      .header-actions {
+        margin-left: auto;
+      }
+
+      .search-wrap {
+        order: 3;
+        flex-basis: 100%;
+      }
+
+      .header-btn.shop-btn {
+        display: none;
+      }
+
+      .hero {
+        padding: 55px 20px 70px;
+      }
+
+      .hero h1 {
+        letter-spacing: -2px;
+      }
+
+      .hero p {
+        font-size: 15px;
+      }
+
+      .hero-showcase {
+        min-height: 270px;
+      }
+
+      .floating-card {
+        width: 145px;
+        min-height: 110px;
+      }
+
+      .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .product-image {
+        height: 190px;
+      }
+
+      .deal-banner,
+      .newsletter,
+      .support {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .section-heading {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      main {
+        padding-top: 40px;
+      }
+
+      .newsletter-form {
+        width: 100%;
+        flex-direction: column;
+      }
+
+      .newsletter-form button {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .top-bar {
+        font-size: 11px;
+      }
+
+      .header-inner {
+        padding: 10px 13px;
+      }
+
+      .header-actions {
+        gap: 5px;
+      }
+
+      .header-btn {
+        padding: 9px 10px;
+        font-size: 12px;
+      }
+
+      .category-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .product-image {
+        height: 240px;
+      }
+
+      .why-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .deal-banner,
+      .newsletter,
+      .support {
+        padding: 25px;
+      }
+
+      .hero-showcase {
+        transform: scale(.88);
+        margin-left: -20px;
+        width: calc(100% + 40px);
+      }
+
+      .product-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .hero h1 {
+        font-size: clamp(39px, 12vw, 62px);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="top-bar">
+    <div class="top-bar-content">
+      🚀 Mixh Hunts • Phones • Laptops • Gadgets • Audio • More
+    </div>
+  </div>
+
+  <header>
+    <div class="header-inner">
+
+      <a href="#" class="logo">
+        MIXH <span>HUNTS</span>
+      </a>
+
+      <div class="search-wrap">
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="Search phones, laptops, gadgets..."
+          autocomplete="off"
+        />
+        <span class="search-icon">🔎</span>
+      </div>
+
+      <div class="header-actions">
+
+        <button class="header-btn shop-btn" onclick="scrollToProducts()">
+          Shop
+        </button>
+
+        <button class="header-btn cart-btn" onclick="openCart()">
+          🛒
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
+
+        <a
+          class="header-btn whatsapp-btn"
+          href="https://wa.me/2347074144068"
+          target="_blank"
+          rel="noopener"
+        >
+          WhatsApp
+        </a>
+
+      </div>
+
+    </div>
+
+    <div class="nav-row">
+      <nav class="nav-inner" id="categoryNav"></nav>
+    </div>
+  </header>
+
+  <section class="hero">
+
+    <div class="hero-inner">
+
+      <div class="hero-content">
+
+        <div class="eyebrow">
+          ✨ Your next tech find could be here
+        </div>
+
+        <h1 id="heroTitle"></h1>
+
+        <p>
+          Phones, laptops, headphones, gadgets, wearables and more.
+          Find what you want, add it to your cart, or talk directly with the owner.
+        </p>
+
+        <div class="hero-buttons">
+
+          <button class="hero-btn primary" onclick="scrollToProducts()">
+            Explore Products →
+          </button>
+
+          <a
+            class="hero-btn secondary"
+            href="https://wa.me/2347074144068?text=Hello%20Mixh%20Hunts%2C%20I%20want%20to%20make%20an%20enquiry."
+            target="_blank"
+            rel="noopener"
+          >
+            💬 Talk with Owner
+          </a>
+
+        </div>
+
+      </div>
+
+      <div class="hero-showcase">
+
+        <div class="floating-card">
+          <div class="floating-icon">📱</div>
+          <strong>Phones</strong>
+          <small>Find your next device</small>
+        </div>
+
+        <div class="floating-card">
+          <div class="floating-icon">💻</div>
+          <strong>Laptops</strong>
+          <small>Power for work & play</small>
+        </div>
+
+        <div class="floating-card">
+          <div class="floating-icon">🎧</div>
+          <strong>Gadgets</strong>
+          <small>Tech worth hunting</small>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <main>
+
+    <section>
+
+      <div class="section-heading">
+        <div>
+          <h2>What are you hunting for?</h2>
+          <p>Pick a category and start exploring.</p>
+        </div>
+      </div>
+
+      <div class="category-grid" id="categoryGrid"></div>
+
+    </section>
+
+    <section class="deal-banner">
+
+      <div>
+        <h2>Can't find what you want?</h2>
+        <p>Tell Mixh Hunts what you're looking for and we'll hunt it down.</p>
+      </div>
+
+      <a
+        class="deal-btn"
+        href="https://wa.me/2347074144068?text=Hello%20Mixh%20Hunts%2C%20I%27m%20looking%20for%20a%20product."
+        target="_blank"
+        rel="noopener"
+      >
+        🎯 Request a Hunt
+      </a>
+
+    </section>
+
+    <section class="newsletter">
+
+      <div class="newsletter-content">
+
+        <h2>🔥 Don't Miss the Hunt</h2>
+
+        <p>
+          Get hot deals, new arrivals and special offers from Mixh Hunts.
+          We won't spam you.
+        </p>
+
+        <form class="newsletter-form" id="newsletterForm">
+
+          <input
+            id="subscriberEmail"
+            type="email"
+            placeholder="Enter your email address"
+            autocomplete="email"
+            required
+          />
+
+          <button id="subscribeButton" type="submit">
+            Subscribe
+          </button>
+
+        </form>
+
+        <div
+          class="newsletter-message"
+          id="newsletterMessage"
+          aria-live="polite"
+        ></div>
+
+      </div>
+
+    </section>
+
+    <section id="productsSection">
+
+      <div class="section-heading">
+
+        <div>
+          <h2>Featured Hunts</h2>
+          <p>Browse what is currently available.</p>
+        </div>
+
+      </div>
+
+      <div class="product-toolbar">
+
+        <div class="result-count" id="resultCount">
+          Loading products...
+        </div>
+
+        <select id="sortSelect" class="sort-select">
+          <option value="featured">Featured first</option>
+          <option value="low">Price: Low to high</option>
+          <option value="high">Price: High to low</option>
+          <option value="name">Name: A-Z</option>
+        </select>
+
+      </div>
+
+      <div class="products-grid" id="productsGrid">
+
+        <div class="loading-state">
+
+          <div class="loading-spinner"></div>
+
+          <h3>Loading the latest hunts...</h3>
+
+          <p>
+            Give us a moment while Mixh Hunts checks the store.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="why-section">
+
+      <div class="section-heading">
+
+        <div>
+          <h2>Why hunt with Mixh?</h2>
+          <p>Built around simple shopping and direct communication.</p>
+        </div>
+
+      </div>
+
+      <div class="why-grid">
+
+        <div class="why-card">
+          <div class="why-icon">🔍</div>
+          <h3>Easy to Find</h3>
+          <p>
+            Search products quickly and browse by category without digging through a maze.
+          </p>
+        </div>
+
+        <div class="why-card">
+          <div class="why-icon">🛒</div>
+          <h3>Build Your Cart</h3>
+          <p>
+            Add different products and quantities to your cart before you're ready to enquire.
+          </p>
+        </div>
+
+        <div class="why-card">
+          <div class="why-icon">💬</div>
+          <h3>Talk Directly</h3>
+          <p>
+            Need help? Contact Mixh Hunts directly through WhatsApp.
+          </p>
+        </div>
+
+        <div class="why-card">
+          <div class="why-icon">🎯</div>
+          <h3>Request a Hunt</h3>
+          <p>
+            If something isn't listed, tell us what you're looking for and we'll try to find it.
+          </p>
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="support">
+
+      <div>
+        <h2>Need help choosing?</h2>
+        <p>
+          Tell us your budget, what you want and what you're looking for.
+          We'll help you figure it out.
+        </p>
+      </div>
+
+      <a
+        class="support-btn"
+        href="https://wa.me/2347074144068?text=Hello%20Mixh%20Hunts%2C%20I%20need%20help%20choosing%20a%20product."
+        target="_blank"
+        rel="noopener"
+      >
+        💬 Talk with Owner
+      </a>
+
+    </section>
+
+  </main>
+
+  <div
+    class="cart-overlay"
+    id="cartOverlay"
+    onclick="handleOverlayClick(event)"
+  >
+
+    <aside class="cart-drawer">
+
+      <div class="cart-header">
+
+        <h2>🛒 Your Cart</h2>
+
+        <button class="close-cart" onclick="closeCart()">
+          ×
+        </button>
+
+      </div>
+
+      <div class="cart-items" id="cartItems"></div>
+
+      <div class="cart-footer">
+
+        <div class="cart-total">
+          <span>Total</span>
+          <strong id="cartTotal">₦0</strong>
+        </div>
+
+        <button class="checkout-btn" onclick="checkoutWhatsApp()">
+          💬 Continue on WhatsApp
+        </button>
+
+        <button class="clear-cart" onclick="clearCart()">
+          Clear Cart
+        </button>
+
+      </div>
+
+    </aside>
+
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <footer>
+
+    <div class="footer-inner">
+
+      <div class="footer-brand">
+
+        <div class="logo">
+          MIXH <span>HUNTS</span>
+        </div>
+
+        <p>
+          Your place to hunt for phones, laptops, gadgets, audio,
+          wearables and more.
+        </p>
+
+      </div>
+
+      <div class="footer-links">
+
+        <a href="#productsSection">
+          Shop
+        </a>
+
+        <a
+          href="https://wa.me/2347074144068"
+          target="_blank"
+          rel="noopener"
+        >
+          WhatsApp
+        </a>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      © 2026 Mixh Hunts. Built for better hunts.
+    </div>
+
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    /*
+      ============================================================
+      MIXH HUNTS
+      SUPABASE STOREFRONT
+      ============================================================
+    */
+
+    const SUPABASE_URL =
+      "https://tbortgatnpcyyhwmdrpb.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_QY5fi2tSy1z4F_DeHLrEFA_r2MtoIqr";
+
+    const WHATSAPP_NUMBER = "2347074144068";
+
+    let supabaseClient = null;
+
+    try {
+      if (
+        window.supabase &&
+        typeof window.supabase.createClient === "function"
+      ) {
+        supabaseClient = window.supabase.createClient(
+          SUPABASE_URL,
+          SUPABASE_PUBLISHABLE_KEY
+        );
+      }
+    } catch (error) {
+      console.error("Supabase initialization failed:", error);
+    }
+
+    /*
+      ============================================================
+      RUNTIME STATE
+      ============================================================
+    */
+
+    let PRODUCTS = [];
+    let CATEGORIES = [];
+
+    let currentCategory = "All";
+    let currentSearch = "";
+
+    let cart = loadCart();
+
+    let productsLoading = true;
+    let categoriesLoading = true;
+
+    /*
+      ============================================================
+      SAFE HELPERS
+      ============================================================
+    */
+
+    function safeText(value, fallback = "") {
+      if (value === null || value === undefined) {
+        return fallback;
+      }
+
+      return String(value);
+    }
+
+    function escapeHtml(value) {
+      return safeText(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function formatPrice(price) {
+      const number = Number(price);
+
+      if (!Number.isFinite(number) || number <= 0) {
+        return "Contact for price";
+      }
+
+      return "₦" + number.toLocaleString("en-NG");
+    }
+
+    function getProduct(id) {
+      return PRODUCTS.find(
+        product => String(product.id) === String(id)
+      ) || null;
+    }
+
+    function getCategoryName(product) {
+      return safeText(
+        product.category ||
+        product.category_name ||
+        ""
+      );
+    }
+
+    function getStockQuantity(product) {
+      const value = Number(product.stock_quantity);
+
+      if (!Number.isFinite(value)) {
+        return null;
+      }
+
+      return Math.max(0, Math.floor(value));
+    }
+
+    function isAvailabilityOut(product) {
+      return safeText(product.availability)
+        .toLowerCase()
+        .includes("out");
+    }
+
+    function isRequestOnly(product) {
+      const availability =
+        safeText(product.availability).toLowerCase();
+
+      return (
+        availability.includes("request") ||
+        availability.includes("contact")
+      );
+    }
+
+    function hasValidPrice(product) {
+      const price = Number(product.price);
+
+      return Number.isFinite(price) && price > 0;
+    }
+
+    function canAddProduct(product) {
+      if (!product) {
+        return false;
+      }
+
+      if (isAvailabilityOut(product)) {
+        return false;
+      }
+
+      const stock = getStockQuantity(product);
+
+      if (stock !== null && stock <= 0) {
+        return false;
+      }
+
+      return true;
+    }
+
+    function getMaxQuantity(product) {
+      const stock = getStockQuantity(product);
+
+      if (stock === null) {
+        return Infinity;
+      }
+
+      return stock;
+    }
+
+    function storagePublicUrl(path) {
+      const cleanPath = safeText(path).trim();
+
+      if (!cleanPath) {
+        return "";
+      }
+
+      if (
+        cleanPath.startsWith("http://") ||
+        cleanPath.startsWith("https://") ||
+        cleanPath.startsWith("data:")
+      ) {
+        return cleanPath;
+      }
+
+      return (
+        SUPABASE_URL +
+        "/storage/v1/object/public/product-images/" +
+        cleanPath.replace(/^\/+/, "")
+      );
+    }
+
+    /*
+      ============================================================
+      HERO TITLE ANIMATION
+      ============================================================
+    */
+
+    function createAnimatedTitle() {
+
+      const title = "Hunt for Your Device";
+      const words = title.split(" ");
+
+      const html = words
+        .map((word, wordIndex) => {
+
+          const letters = [...word]
+            .map((letter, letterIndex) => {
+
+              const delay =
+                (
+                  wordIndex * 0.35 +
+                  letterIndex * 0.045
+                ).toFixed(3);
+
+              return `
+                <span
+                  class="hero-letter"
+                  style="animation-delay:${delay}s"
+                >
+                  ${escapeHtml(letter)}
+                </span>
+              `;
+            })
+            .join("");
+
+          return `
+            <span class="hero-word">
+              ${letters}
+            </span>
+          `;
+        })
+        .join(`
+          <span
+            class="hero-space"
+            aria-hidden="true"
+          >&nbsp;</span>
+        `);
+
+      const element =
+        document.getElementById("heroTitle");
+
+      if (element) {
+        element.innerHTML = html;
+      }
+    }
+
+    /*
+      ============================================================
+      CART STORAGE
+      ============================================================
+    */
+
+    function loadCart() {
+
+      try {
+
+        const saved =
+          localStorage.getItem("mixh_hunts_cart");
+
+        if (!saved) {
+          return [];
+        }
+
+        const parsed = JSON.parse(saved);
+
+        if (!Array.isArray(parsed)) {
+          return [];
+        }
+
+        return parsed
+          .filter(item => {
+
+            if (!item) {
+              return false;
+            }
+
+            const id =
+              item.id !== undefined
+                ? item.id
+                : item.productId;
+
+            const quantity =
+              Number(item.quantity);
+
+            return (
+              id !== undefined &&
+              id !== null &&
+              String(id).trim() !== "" &&
+              Number.isFinite(quantity) &&
+              quantity > 0
+            );
+          })
+          .map(item => {
+
+            const id =
+              item.id !== undefined
+                ? item.id
+                : item.productId;
+
+            return {
+              id: String(id),
+              quantity: Math.max(
+                1,
+                Math.floor(
+                  Number(item.quantity)
+                )
+              )
+            };
+          });
+
+      } catch (error) {
+
+        console.warn(
+          "Could not load cart:",
+          error
+        );
+
+        return [];
+      }
+    }
+
+    function saveCart() {
+
+      try {
+
+        localStorage.setItem(
+          "mixh_hunts_cart",
+          JSON.stringify(cart)
+        );
+
+      } catch (error) {
+
+        console.warn(
+          "Could not save cart:",
+          error
+        );
+      }
+    }
+
+    /*
+      ============================================================
+      NORMALIZE CART
+      ============================================================
+    */
+
+    function normalizeCart() {
+
+      if (!Array.isArray(cart)) {
+        cart = [];
+      }
+
+      let changed = false;
+      const normalized = [];
+
+      for (const item of cart) {
+
+        if (!item) {
+          changed = true;
+          continue;
+        }
+
+        const productId =
+          item.id !== undefined
+            ? String(item.id)
+            : "";
+
+        const product =
+          getProduct(productId);
+
+        if (!product) {
+          changed = true;
+          continue;
+        }
+
+        if (!canAddProduct(product)) {
+          changed = true;
+          continue;
+        }
+
+        let quantity =
+          Math.floor(
+            Number(item.quantity) || 1
+          );
+
+        if (quantity < 1) {
+          quantity = 1;
+          changed = true;
+        }
+
+        const max =
+          getMaxQuantity(product);
+
+        if (
+          Number.isFinite(max) &&
+          quantity > max
+        ) {
+          quantity = max;
+          changed = true;
+        }
+
+        if (quantity <= 0) {
+          changed = true;
+          continue;
+        }
+
+        normalized.push({
+          id: productId,
+          quantity
+        });
+      }
+
+      /*
+        Merge duplicate cart entries.
+        This prevents old cart formats or accidental duplicate
+        entries from making the cart behave strangely.
+      */
+
+      const merged = new Map();
+
+      for (const item of normalized) {
+
+        if (!merged.has(item.id)) {
+
+          merged.set(
+            item.id,
+            item.quantity
+          );
+
+        } else {
+
+          const product =
+            getProduct(item.id);
+
+          const max =
+            product
+              ? getMaxQuantity(product)
+              : Infinity;
+
+          let total =
+            merged.get(item.id) +
+            item.quantity;
+
+          if (
+            Number.isFinite(max)
+          ) {
+            total =
+              Math.min(
+                total,
+                max
+              );
+          }
+
+          merged.set(
+            item.id,
+            total
+          );
+
+          changed = true;
+        }
+      }
+
+      cart =
+        Array.from(
+          merged.entries()
+        ).map(
+          ([id, quantity]) => ({
+            id,
+            quantity
+          })
+        );
+
+      if (changed) {
+        saveCart();
+      }
+    }
+
+    /*
+      ============================================================
+      CATEGORY NAV
+      ============================================================
+    */
+
+    function renderCategoryNav() {
+
+      const nav =
+        document.getElementById("categoryNav");
+
+      if (!nav) return;
+
+      const allButton = `
+        <button
+          class="category-btn ${
+            currentCategory === "All"
+              ? "active"
+              : ""
+          }"
+          onclick="selectCategory('All')"
+        >
+          All Categories
+        </button>
+      `;
+
+      const categoryButtons =
+        CATEGORIES.map(category => {
+
+          const name =
+            safeText(category.name);
+
+          return `
+            <button
+              class="category-btn ${
+                currentCategory === name
+                  ? "active"
+                  : ""
+              }"
+              onclick="selectCategory(${JSON.stringify(name)})"
+            >
+              ${escapeHtml(category.icon || "📦")}
+              ${escapeHtml(name)}
+            </button>
+          `;
+
+        }).join("");
+
+      const helpButton = `
+        <a
+          class="category-btn"
+          href="https://wa.me/${WHATSAPP_NUMBER}?text=Hello%20Mixh%20Hunts%2C%20I%20need%20help."
+          target="_blank"
+          rel="noopener"
+        >
+          💬 Need Help
+        </a>
+      `;
+
+      nav.innerHTML =
+        allButton +
+        categoryButtons +
+        helpButton;
+    }
+
+    /*
+      ============================================================
+      CATEGORY GRID
+      ============================================================
+    */
+
+    function renderCategoryGrid() {
+
+      const grid =
+        document.getElementById("categoryGrid");
+
+      if (!grid) return;
+
+      if (!CATEGORIES.length) {
+
+        grid.innerHTML = `
+          <div class="empty-state">
+            <div>📦</div>
+            <h3>No categories yet</h3>
+            <p>
+              Categories will appear here when they are added to Mixh Hunts.
+            </p>
+          </div>
+        `;
+
+        return;
+      }
+
+      grid.innerHTML =
+        CATEGORIES.map(category => {
+
+          const name =
+            safeText(category.name);
+
+          const count =
+            PRODUCTS.filter(
+              product =>
+                getCategoryName(product) === name
+            ).length;
+
+          return `
+            <div
+              class="category-card"
+              onclick="selectCategory(${JSON.stringify(name)})"
+            >
+              <div class="category-icon">
+                ${escapeHtml(category.icon || "📦")}
+              </div>
+
+              <strong>
+                ${escapeHtml(name)}
+              </strong>
+
+              <small>
+                ${count}
+                product${count === 1 ? "" : "s"}
+              </small>
+            </div>
+          `;
+
+        }).join("");
+    }
+
+    /*
+      ============================================================
+      PRODUCT IMAGE
+      ============================================================
+    */
+
+    function productImage(product) {
+
+      const image =
+        safeText(product.image).trim();
+
+      if (!image) {
+
+        return `
+          <div
+            class="placeholder-icon"
+            aria-label="${escapeHtml(product.name)}"
+          >
+            ${escapeHtml(product.icon || "📦")}
+          </div>
+        `;
+      }
+
+      return `
+        <img
+          src="${escapeHtml(image)}"
+          alt="${escapeHtml(product.name)}"
+          loading="lazy"
+          onerror="
+            this.style.display='none';
+            this.nextElementSibling.style.display='grid';
+          "
+        />
+
+        <div
+          class="placeholder-icon"
+          style="display:none;"
+        >
+          ${escapeHtml(product.icon || "📦")}
+        </div>
+      `;
+    }
+
+    /*
+      ============================================================
+      PRODUCT SEARCH
+      ============================================================
+    */
+
+    function specificationSearchText(specifications) {
+
+      if (!specifications) {
+        return "";
+      }
+
+      try {
+
+        if (
+          typeof specifications === "string"
+        ) {
+          return specifications;
+        }
+
+        if (
+          typeof specifications === "object"
+        ) {
+
+          return Object.entries(
+            specifications
+          )
+            .map(([key, value]) => {
+              return `${key} ${value}`;
+            })
+            .join(" ");
+
+        }
+
+      } catch (error) {
+
+        console.warn(
+          "Could not search specifications:",
+          error
+        );
+      }
+
+      return "";
+    }
+
+    function getFilteredProducts() {
+
+      const search =
+        currentSearch
+          .trim()
+          .toLowerCase();
+
+      let products =
+        PRODUCTS.filter(product => {
+
+          const category =
+            getCategoryName(product);
+
+          const categoryMatch =
+            currentCategory === "All" ||
+            category === currentCategory;
+
+          if (!categoryMatch) {
+            return false;
+          }
+
+          if (!search) {
+            return true;
+          }
+
+          const searchableText = [
+
+            product.name,
+            category,
+            product.brand,
+            product.model,
+            product.variant,
+            product.storage,
+            product.ram,
+            product.color,
+            product.processor,
+            product.condition,
+            product.availability,
+            product.description,
+
+            specificationSearchText(
+              product.specifications
+            )
+
+          ]
+            .filter(Boolean)
+            .join(" ")
+            .toLowerCase();
+
+          return searchableText.includes(search);
+        });
+
+      return sortProducts(products);
+    }
+
+    /*
+      ============================================================
+      SORT
+      ============================================================
+    */
+
+    function sortProducts(products) {
+
+      const select =
+        document.getElementById("sortSelect");
+
+      if (!select) {
+        return products;
+      }
+
+      const mode =
+        select.value;
+
+      const copied = [...products];
+
+      if (mode === "low") {
+
+        return copied.sort((a, b) => {
+
+          const aPrice =
+            Number(a.price) || 0;
+
+          const bPrice =
+            Number(b.price) || 0;
+
+          return aPrice - bPrice;
+        });
+      }
+
+      if (mode === "high") {
+
+        return copied.sort((a, b) => {
+
+          const aPrice =
+            Number(a.price) || 0;
+
+          const bPrice =
+            Number(b.price) || 0;
+
+          return bPrice - aPrice;
+        });
+      }
+
+      if (mode === "name") {
+
+        return copied.sort((a, b) => {
+
+          return safeText(a.name)
+            .localeCompare(
+              safeText(b.name)
+            );
+
+        });
+      }
+
+      return copied.sort((a, b) => {
+
+        return (
+          Number(Boolean(b.featured)) -
+          Number(Boolean(a.featured))
+        );
+
+      });
+    }
+
+    /*
+      ============================================================
+      PRODUCT CARD
+      ============================================================
+    */
+
+    function productCard(product, index) {
+
+      const stock =
+        safeText(
+          product.availability,
+          "Unknown"
+        );
+
+      const outByAvailability =
+        isAvailabilityOut(product);
+
+      const stockQuantity =
+        getStockQuantity(product);
+
+      const zeroStock =
+        stockQuantity !== null &&
+        stockQuantity <= 0;
+
+      const requestOnly =
+        isRequestOnly(product);
+
+      const noPrice =
+        !hasValidPrice(product);
+
+      const disabled =
+        !canAddProduct(product);
+
+      let stockLabel = stock;
+
+      if (
+        zeroStock &&
+        requestOnly &&
+        noPrice
+      ) {
+        stockLabel = "On Request";
+      }
+
+      const variantItems = [
+
+        product.variant,
+        product.storage,
+        product.ram,
+        product.color,
+        product.processor,
+        product.condition
+
+      ]
+        .filter(Boolean)
+        .filter(
+          (value, valueIndex, array) =>
+            array.indexOf(value) === valueIndex
+        )
+        .slice(0, 4);
+
+      const variantHtml =
+        variantItems.length
+          ? `
+            <div class="variant-line">
+              ${variantItems.map(item => `
+                <span class="variant-pill">
+                  ${escapeHtml(item)}
+                </span>
+              `).join("")}
+            </div>
+          `
+          : "";
+
+      const whatsappMessage =
+        encodeURIComponent(
+          `Hello Mixh Hunts, I'm interested in ${safeText(product.name)}.`
+        );
+
+      let buttonText =
+        "🛒 Add to Cart";
+
+      if (outByAvailability) {
+
+        buttonText =
+          "Sold Out";
+
+      } else if (
+        zeroStock &&
+        !requestOnly
+      ) {
+
+        buttonText =
+          "Out of Stock";
+
+      } else if (
+        zeroStock &&
+        requestOnly &&
+        noPrice
+      ) {
+
+        buttonText =
+          "Ask About This";
+
+      }
+
+      return `
+        <article
+          class="product-card"
+          style="animation-delay:${Math.min(index * 0.06, 0.5)}s"
+        >
+
+          <div class="product-image">
+
+            ${
+              product.badge
+                ? `
+                  <span class="badge">
+                    ${escapeHtml(product.badge)}
+                  </span>
+                `
+                : ""
+            }
+
+            <span
+              class="stock-badge ${
+                outByAvailability ||
+                (
+                  zeroStock &&
+                  !requestOnly
+                )
+                  ? "out"
+                  : ""
+              }"
+            >
+              ${escapeHtml(stockLabel)}
+            </span>
+
+            ${productImage(product)}
+
+          </div>
+
+          <div class="product-info">
+
+            <div class="product-category">
+              ${escapeHtml(
+                getCategoryName(product)
+              )}
+            </div>
+
+            <div class="product-name">
+              ${escapeHtml(product.name)}
+            </div>
+
+            <div class="product-description">
+              ${escapeHtml(
+                product.description ||
+                "Ask Mixh Hunts for more details."
+              )}
+            </div>
+
+            ${variantHtml}
+
+            <div class="product-bottom">
+
+              <div
+                class="price ${
+                  hasValidPrice(product)
+                    ? ""
+                    : "contact"
+                }"
+              >
+                ${formatPrice(product.price)}
+              </div>
+
+            </div>
+
+            <button
+              class="add-cart"
+              onclick="addToCart(${JSON.stringify(product.id)})"
+              ${disabled ? "disabled" : ""}
+            >
+              ${buttonText}
+            </button>
+
+            <a
+              class="whatsapp-product"
+              href="https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMessage}"
+              target="_blank"
+              rel="noopener"
+            >
+              💬 Ask about this product
+            </a>
+
+          </div>
+
+        </article>
+      `;
+    }
+
+    /*
+      ============================================================
+      RENDER PRODUCTS
+      ============================================================
+    */
+
+    function renderProducts() {
+
+      const grid =
+        document.getElementById(
+          "productsGrid"
+        );
+
+      const resultCount =
+        document.getElementById(
+          "resultCount"
+        );
+
+      if (!grid) return;
+
+      if (productsLoading) {
+
+        grid.innerHTML = `
+          <div class="loading-state">
+
+            <div class="loading-spinner"></div>
+
+            <h3>
+              Loading the latest hunts...
+            </h3>
+
+            <p>
+              Give us a moment while Mixh Hunts checks the store.
+            </p>
+
+          </div>
+        `;
+
+        if (resultCount) {
+          resultCount.textContent =
+            "Loading products...";
+        }
+
+        return;
+      }
+
+      const products =
+        getFilteredProducts();
+
+      if (resultCount) {
+
+        resultCount.textContent =
+          `${products.length} product${
+            products.length === 1
+              ? ""
+              : "s"
+          }`;
+      }
+
+      if (!products.length) {
+
+        const hasProducts =
+          PRODUCTS.length > 0;
+
+        grid.innerHTML = `
+          <div class="empty-state">
+
+            <div>
+              ${hasProducts ? "🔎" : "📦"}
+            </div>
+
+            <h3>
+              ${
+                hasProducts
+                  ? "No hunts found"
+                  : "No products have been added yet"
+              }
+            </h3>
+
+            <p>
+              ${
+                hasProducts
+                  ? "Try another search or browse all categories."
+                  : "Products added from the Mixh Hunts admin system will appear here."
+              }
+            </p>
+
+            ${
+              hasProducts
+                ? `
+                  <button onclick="resetFilters()">
+                    Show Everything
+                  </button>
+                `
+                : ""
+            }
+
+          </div>
+        `;
+
+        return;
+      }
+
+      grid.innerHTML =
+        products
+          .map(
+            (product, index) =>
+              productCard(
+                product,
+                index
+              )
+          )
+          .join("");
+    }
+
+    /*
+      ============================================================
+      LOAD CATEGORIES
+      ============================================================
+    */
+
+    async function loadCategories() {
+
+      if (!supabaseClient) {
+        throw new Error(
+          "Supabase client is unavailable."
+        );
+      }
+
+      categoriesLoading = true;
+
+      const {
+        data,
+        error
+      } = await supabaseClient
+        .from("categories")
+        .select("*")
+        .eq("is_active", true)
+        .order(
+          "sort_order",
+          {
+            ascending: true
+          }
+        );
+
+      if (error) {
+        throw error;
+      }
+
+      CATEGORIES =
+        Array.isArray(data)
+          ? data
+          : [];
+
+      categoriesLoading = false;
+
+      renderCategoryNav();
+      renderCategoryGrid();
+    }
+
+    /*
+      ============================================================
+      LOAD PRODUCTS + IMAGES
+      ============================================================
+    */
+
+    async function loadProducts() {
+
+      if (!supabaseClient) {
+        throw new Error(
+          "Supabase client is unavailable."
+        );
+      }
+
+      const productsPromise =
+        supabaseClient
+          .from("products")
+          .select("*")
+          .eq("is_active", true)
+          .order(
+            "featured",
+            {
+              ascending: false
+            }
+          )
+          .order(
+            "created_at",
+            {
+              ascending: false
+            }
+          );
+
+      const imagesPromise =
+        supabaseClient
+          .from("product_images")
+          .select("*")
+          .order(
+            "sort_order",
+            {
+              ascending: true
+            }
+          );
+
+      const [
+        productsResult,
+        imagesResult
+      ] = await Promise.all([
+        productsPromise,
+        imagesPromise
+      ]);
+
+      if (productsResult.error) {
+        throw productsResult.error;
+      }
+
+      if (imagesResult.error) {
+        throw imagesResult.error;
+      }
+
+      const rawProducts =
+        Array.isArray(
+          productsResult.data
+        )
+          ? productsResult.data
+          : [];
+
+      const rawImages =
+        Array.isArray(
+          imagesResult.data
+        )
+          ? imagesResult.data
+          : [];
+
+      const imagesByProduct =
+        new Map();
+
+      for (const image of rawImages) {
+
+        const productId =
+          safeText(
+            image.product_id
+          );
+
+        if (!productId) {
+          continue;
+        }
+
+        if (
+          !imagesByProduct.has(
+            productId
+          )
+        ) {
+          imagesByProduct.set(
+            productId,
+            []
+          );
+        }
+
+        imagesByProduct
+          .get(productId)
+          .push(image);
+      }
+
+      const categoryMap =
+        new Map(
+          CATEGORIES.map(
+            category => [
+              safeText(category.id),
+              safeText(category.name)
+            ]
+          )
+        );
+
+      PRODUCTS =
+        rawProducts.map(product => {
+
+          const images =
+            imagesByProduct.get(
+              safeText(product.id)
+            ) || [];
+
+          const imageUrls =
+            images
+              .map(image => {
+
+                return storagePublicUrl(
+                  image.image_url
+                );
+
+              })
+              .filter(Boolean);
+
+          const primaryImage =
+            images.find(
+              image =>
+                image.is_primary === true
+            );
+
+          const image =
+            primaryImage
+              ? storagePublicUrl(
+                  primaryImage.image_url
+                )
+              : imageUrls[0] || "";
+
+          const category =
+            safeText(
+              product.category ||
+              categoryMap.get(
+                safeText(
+                  product.category_id
+                )
+              ) ||
+              ""
+            );
+
+          return {
+
+            ...product,
+
+            id: safeText(product.id),
+
+            name:
+              safeText(
+                product.name,
+                "Unnamed Product"
+              ),
+
+            category,
+
+            category_id:
+              safeText(
+                product.category_id
+              ),
+
+            brand:
+              safeText(product.brand),
+
+            model:
+              safeText(product.model),
+
+            variant:
+              safeText(product.variant),
+
+            storage:
+              safeText(product.storage),
+
+            ram:
+              safeText(product.ram),
+
+            color:
+              safeText(product.color),
+
+            processor:
+              safeText(product.processor),
+
+            condition:
+              safeText(product.condition),
+
+            price:
+              Number(product.price) || 0,
+
+            availability:
+              safeText(
+                product.availability,
+                "In Stock"
+              ),
+
+            stock_quantity:
+              product.stock_quantity,
+
+            badge:
+              safeText(product.badge),
+
+            featured:
+              Boolean(product.featured),
+
+            description:
+              safeText(
+                product.description
+              ),
+
+            specifications:
+              product.specifications || {},
+
+            image,
+
+            images: imageUrls,
+
+            icon:
+              category === "Phones"
+                ? "📱"
+                : category === "Laptops"
+                ? "💻"
+                : category === "Audio"
+                ? "🎧"
+                : category === "Wearables"
+                ? "⌚"
+                : category === "Vehicles"
+                ? "🚗"
+                : category === "Gaming"
+                ? "🎮"
+                : category === "Cameras"
+                ? "📷"
+                : "📦"
+          };
+        });
+
+      productsLoading = false;
+
+      normalizeCart();
+
+      renderCategoryGrid();
+      renderProducts();
+      renderCart();
+      updateCartCount();
+    }
+
+    /*
+      ============================================================
+      CATEGORY SELECTION
+      ============================================================
+    */
+
+    function selectCategory(category) {
+
+      currentCategory =
+        safeText(category, "All");
+
+      renderCategoryNav();
+      renderProducts();
+
+      const section =
+        document.getElementById(
+          "productsSection"
+        );
+
+      if (section) {
+
+        setTimeout(() => {
+
+          section.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          });
+
+        }, 30);
+      }
+    }
+
+    /*
+      ============================================================
+      SEARCH
+      ============================================================
+    */
+
+    function setupSearch() {
+
+      const input =
+        document.getElementById(
+          "searchInput"
+        );
+
+      if (!input) return;
+
+      input.addEventListener(
+        "input",
+        function(event) {
+
+          currentSearch =
+            event.target.value || "";
+
+          renderProducts();
+        }
+      );
+    }
+
+    /*
+      ============================================================
+      ADD TO CART
+      ============================================================
+    */
+
+    function addToCart(productId) {
+
+      const product =
+        getProduct(productId);
+
+      if (!product) {
+
+        showToast(
+          "Product could not be found."
+        );
+
+        return;
+      }
+
+      if (!canAddProduct(product)) {
+
+        showToast(
+          "This product is not currently available."
+        );
+
+        return;
+      }
+
+      normalizeCart();
+
+      const existing =
+        cart.find(
+          item =>
+            String(item.id) ===
+            String(productId)
+        );
+
+      const max =
+        getMaxQuantity(product);
+
+      if (existing) {
+
+        if (
+          Number.isFinite(max) &&
+          existing.quantity >= max
+        ) {
+
+          showToast(
+            `Only ${max} available.`
+          );
+
+          return;
+        }
+
+        existing.quantity += 1;
+
+      } else {
+
+        cart.push({
+          id: String(productId),
+          quantity: 1
+        });
+      }
+
+      saveCart();
+      renderCart();
+      updateCartCount();
+
+      showToast(
+        `${product.name} added to cart 🛒`
+      );
+    }
+
+    /*
+      ============================================================
+      CHANGE QUANTITY
+      ============================================================
+    */
+
+    function changeQuantity(
+      productId,
+      amount
+    ) {
+
+      normalizeCart();
+
+      const id =
+        String(productId);
+
+      const item =
+        cart.find(
+          cartItem =>
+            String(cartItem.id) === id
+        );
+
+      const product =
+        getProduct(id);
+
+      if (!item || !product) {
+
+        normalizeCart();
+        renderCart();
+        updateCartCount();
+
+        return;
+      }
+
+      const change =
+        Number(amount);
+
+      if (!Number.isFinite(change)) {
+        return;
+      }
+
+      const newQuantity =
+        item.quantity + change;
+
+      if (newQuantity <= 0) {
+
+        removeFromCart(id);
+        return;
+      }
+
+      const max =
+        getMaxQuantity(product);
+
+      if (
+        Number.isFinite(max) &&
+        newQuantity > max
+      ) {
+
+        showToast(
+          `Only ${max} available.`
+        );
+
+        return;
+      }
+
+      item.quantity =
+        newQuantity;
+
+      saveCart();
+      renderCart();
+      updateCartCount();
+    }
+
+    /*
+      ============================================================
+      REMOVE CART ITEM
+      ============================================================
+    */
+
+    function removeFromCart(productId) {
+
+      const id =
+        String(productId);
+
+      const oldLength =
+        cart.length;
+
+      cart =
+        cart.filter(
+          item =>
+            String(item.id) !== id
+        );
+
+      if (
+        cart.length !== oldLength
+      ) {
+
+        saveCart();
+        renderCart();
+        updateCartCount();
+
+        showToast(
+          "Item removed from cart."
+        );
+      }
+    }
+
+    /*
+      ============================================================
+      CLEAR CART
+      ============================================================
+    */
+
+    function clearCart() {
+
+      if (!cart.length) {
+
+        showToast(
+          "Your cart is already empty."
+        );
+
+        return;
+      }
+
+      cart = [];
+
+      saveCart();
+      renderCart();
+      updateCartCount();
+
+      showToast(
+        "Cart cleared."
+      );
+    }
+
+    /*
+      ============================================================
+      CART COUNT
+      ============================================================
+    */
+
+    function updateCartCount() {
+
+      const countElement =
+        document.getElementById(
+          "cartCount"
+        );
+
+      if (!countElement) {
+        return;
+      }
+
+      normalizeCart();
+
+      const totalQuantity =
+        cart.reduce(
+          (total, item) =>
+            total + Number(item.quantity || 0),
+          0
+        );
+
+      countElement.textContent =
+        totalQuantity > 99
+          ? "99+"
+          : String(totalQuantity);
+    }
+
+    /*
+      ============================================================
+      CART TOTAL
+      ============================================================
+    */
+
+    function getCartTotal() {
+
+      return cart.reduce(
+        (total, item) => {
+
+          const product =
+            getProduct(item.id);
+
+          if (!product) {
+            return total;
+          }
+
+          const price =
+            Number(product.price);
+
+          if (
+            !Number.isFinite(price) ||
+            price <= 0
+          ) {
+            return total;
+          }
+
+          return (
+            total +
+            price * item.quantity
+          );
+
+        },
+        0
+      );
+    }
+
+    function cartHasUnknownPrice() {
+
+      return cart.some(item => {
+
+        const product =
+          getProduct(item.id);
+
+        if (!product) {
+          return false;
+        }
+
+        return !hasValidPrice(product);
+      });
+    }
+
+    /*
+      ============================================================
+      RENDER CART
+      ============================================================
+    */
+
+    function renderCart() {
+
+      const container =
+        document.getElementById(
+          "cartItems"
+        );
+
+      const totalElement =
+        document.getElementById(
+          "cartTotal"
+        );
+
+      if (!container) {
+        return;
+      }
+
+      normalizeCart();
+
+      if (!cart.length) {
+
+        container.innerHTML = `
+          <div class="cart-empty">
+
+            <div class="cart-empty-icon">
+              🛒
+            </div>
+
+            <h3>
+              Your cart is empty
+            </h3>
+
+            <p>
+              Add some products and they'll appear here.
+            </p>
+
+          </div>
+        `;
+
+      } else {
+
+        container.innerHTML =
+          cart.map(item => {
+
+            const product =
+              getProduct(item.id);
+
+            if (!product) {
+              return "";
+            }
+
+            const image =
+              safeText(
+                product.image
+              ).trim();
+
+            return `
+              <div class="cart-item">
+
+                <div class="cart-item-image">
+
+                  ${
+                    image
+                      ? `
+                        <img
+                          src="${escapeHtml(image)}"
+                          alt="${escapeHtml(product.name)}"
+                          onerror="
+                            this.style.display='none';
+                            this.nextElementSibling.style.display='block';
+                          "
+                        />
+
+                        <span style="display:none;">
+                          ${escapeHtml(
+                            product.icon || "📦"
+                          )}
+                        </span>
+                      `
+                      : escapeHtml(
+                          product.icon || "📦"
+                        )
+                  }
+
+                </div>
+
+                <div>
+
+                  <div class="cart-item-name">
+                    ${escapeHtml(
+                      product.name
+                    )}
+                  </div>
+
+                  <div class="cart-item-price">
+                    ${formatPrice(
+                      product.price
+                    )}
+                  </div>
+
+                  <div class="qty-controls">
+
+                    <button
+                      type="button"
+                      aria-label="Decrease quantity"
+                      onclick="changeQuantity(
+                        ${JSON.stringify(product.id)},
+                        -1
+                      )"
+                    >
+                      −
+                    </button>
+
+                    <strong>
+                      ${item.quantity}
+                    </strong>
+
+                    <button
+                      type="button"
+                      aria-label="Increase quantity"
+                      onclick="changeQuantity(
+                        ${JSON.stringify(product.id)},
+                        1
+                      )"
+                    >
+                      +
+                    </button>
+
+                    <button
+                      type="button"
+                      class="remove-item"
+                      onclick="removeFromCart(
+                        ${JSON.stringify(product.id)}
+                      )"
+                    >
+                      Remove
+                    </button>
+
+                  </div>
+
+                </div>
+
+              </div>
+            `;
+
+          }).join("");
+      }
+
+      if (totalElement) {
+
+        const total =
+          getCartTotal();
+
+        if (total > 0) {
+
+          totalElement.textContent =
+            "₦" +
+            total.toLocaleString(
+              "en-NG"
+            );
+
+        } else if (cart.length) {
+
+          totalElement.textContent =
+            "Contact for price";
+
+        } else {
+
+          totalElement.textContent =
+            "₦0";
+        }
+      }
+    }
+
+    /*
+      ============================================================
+      CART OPEN / CLOSE
+      ============================================================
+    */
+
+    function openCart() {
+
+      const overlay =
+        document.getElementById(
+          "cartOverlay"
+        );
+
+      if (!overlay) {
+        return;
+      }
+
+      normalizeCart();
+      renderCart();
+      updateCartCount();
+
+      overlay.classList.add(
+        "open"
+      );
+
+      document.body.style.overflow =
+        "hidden";
+    }
+
+    function closeCart() {
+
+      const overlay =
+        document.getElementById(
+          "cartOverlay"
+        );
+
+      if (!overlay) {
+        return;
+      }
+
+      overlay.classList.remove(
+        "open"
+      );
+
+      document.body.style.overflow =
+        "";
+    }
+
+    function handleOverlayClick(event) {
+
+      if (
+        event.target.id ===
+        "cartOverlay"
+      ) {
+        closeCart();
+      }
+    }
+
+    /*
+      ============================================================
+      WHATSAPP CHECKOUT
+      ============================================================
+    */
+
+    function checkoutWhatsApp() {
+
+      normalizeCart();
+
+      if (!cart.length) {
+
+        showToast(
+          "Your cart is empty."
+        );
+
+        return;
+      }
+
+      let message =
+        "Hello Mixh Hunts! 👋\n\n" +
+        "I'd like to enquire about these products:\n\n";
+
+      let knownSubtotal = 0;
+      let hasUnknownPrice = false;
+
+      cart.forEach(
+        (item, index) => {
+
+          const product =
+            getProduct(item.id);
+
+          if (!product) {
+            return;
+          }
+
+          const price =
+            Number(product.price);
+
+          const priceText =
+            Number.isFinite(price) &&
+            price > 0
+              ? ` - ₦${price.toLocaleString("en-NG")} each`
+              : " - Contact for price";
+
+          message +=
+            `${index + 1}. ${safeText(product.name)} × ${item.quantity}${priceText}\n`;
+
+          if (
+            Number.isFinite(price) &&
+            price > 0
+          ) {
+
+            knownSubtotal +=
+              price *
+              item.quantity;
+
+          } else {
+
+            hasUnknownPrice = true;
+          }
+
+          if (product.variant) {
+
+            message +=
+              `   Variant: ${safeText(product.variant)}\n`;
+          }
+
+          if (product.storage) {
+
+            message +=
+              `   Storage: ${safeText(product.storage)}\n`;
+          }
+
+          if (product.color) {
+
+            message +=
+              `   Color: ${safeText(product.color)}\n`;
+          }
+        }
+      );
+
+      message += "\n";
+
+      if (knownSubtotal > 0) {
+
+        message +=
+          `Known subtotal: ₦${knownSubtotal.toLocaleString("en-NG")}\n`;
+      }
+
+      if (hasUnknownPrice) {
+
+        message +=
+          "Some prices are on request.\n";
+      }
+
+      message +=
+        "\nPlease confirm the current price and availability.\n\nThank you!";
+
+      const url =
+        `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+
+      window.open(
+        url,
+        "_blank",
+        "noopener"
+      );
+    }
+
+    /*
+      ============================================================
+      NEWSLETTER SUBSCRIPTION
+      ============================================================
+    */
+
+    function setupNewsletter() {
+
+      const form =
+        document.getElementById(
+          "newsletterForm"
+        );
+
+      const emailInput =
+        document.getElementById(
+          "subscriberEmail"
+        );
+
+      const button =
+        document.getElementById(
+          "subscribeButton"
+        );
+
+      const message =
+        document.getElementById(
+          "newsletterMessage"
+        );
+
+      if (
+        !form ||
+        !emailInput ||
+        !button ||
+        !message
+      ) {
+        return;
+      }
+
+      form.addEventListener(
+        "submit",
+        async function(event) {
+
+          event.preventDefault();
+
+          if (!supabaseClient) {
+
+            message.textContent =
+              "Subscription is temporarily unavailable. Please try again later.";
+
+            return;
+          }
+
+          const email =
+            emailInput.value
+              .trim()
+              .toLowerCase();
+
+          if (!email) {
+            return;
+          }
+
+          button.disabled = true;
+          button.textContent =
+            "Subscribing...";
+
+          message.textContent =
+            "Adding you to the list...";
+
+          try {
+
+            const {
+              data,
+              error
+            } = await supabaseClient
+              .from("subscribers")
+              .insert({
+                email,
+                is_active: true
+              })
+              .select()
+              .single();
+
+            if (error) {
+
+              const duplicate =
+                error.code === "23505" ||
+                safeText(
+                  error.message
+                )
+                  .toLowerCase()
+                  .includes("duplicate");
+
+              if (duplicate) {
+
+                message.textContent =
+                  "You're already on the Mixh Hunts list 🔥";
+
+                emailInput.value = "";
+
+                showToast(
+                  "You're already subscribed."
+                );
+
+              } else {
+
+                throw error;
+              }
+
+            } else {
+
+              emailInput.value = "";
+
+              message.textContent =
+                "You're in! Watch out for hot Mixh Hunts deals 🔥";
+
+              showToast(
+                "Subscribed successfully!"
+              );
+            }
+
+          } catch (error) {
+
+            console.error(
+              "Subscription failed:",
+              error
+            );
+
+            message.textContent =
+              "We couldn't subscribe you right now. Please try again.";
+
+            showToast(
+              "Subscription failed."
+            );
+
+          } finally {
+
+            button.disabled = false;
+            button.textContent =
+              "Subscribe";
+          }
+
+        }
+      );
+    }
+
+    /*
+      ============================================================
+      TOAST
+      ============================================================
+    */
+
+    let toastTimer = null;
+
+    function showToast(message) {
+
+      const toast =
+        document.getElementById(
+          "toast"
+        );
+
+      if (!toast) {
+        return;
+      }
+
+      toast.textContent =
+        message;
+
+      toast.classList.add(
+        "show"
+      );
+
+      clearTimeout(
+        toastTimer
+      );
+
+      toastTimer =
+        setTimeout(() => {
+
+          toast.classList.remove(
+            "show"
+          );
+
+        }, 2200);
+    }
+
+    /*
+      ============================================================
+      RESET FILTERS
+      ============================================================
+    */
+
+    function resetFilters() {
+
+      currentCategory =
+        "All";
+
+      currentSearch =
+        "";
+
+      const searchInput =
+        document.getElementById(
+          "searchInput"
+        );
+
+      if (searchInput) {
+        searchInput.value = "";
+      }
+
+      renderCategoryNav();
+      renderProducts();
+
+      showToast(
+        "Showing all products."
+      );
+    }
+
+    /*
+      ============================================================
+      SCROLL
+      ============================================================
+    */
+
+    function scrollToProducts() {
+
+      const section =
+        document.getElementById(
+          "productsSection"
+        );
+
+      if (!section) {
+        return;
+      }
+
+      section.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
+
+    /*
+      ============================================================
+      SORT
+      ============================================================
+    */
+
+    function setupSort() {
+
+      const select =
+        document.getElementById(
+          "sortSelect"
+        );
+
+      if (!select) {
+        return;
+      }
+
+      select.addEventListener(
+        "change",
+        renderProducts
+      );
+    }
+
+    /*
+      ============================================================
+      DATABASE ERROR DISPLAY
+      ============================================================
+    */
+
+    function showDatabaseError(error) {
+
+      console.error(
+        "Mixh Hunts database error:",
+        error
+      );
+
+      productsLoading = false;
+
+      const grid =
+        document.getElementById(
+          "productsGrid"
+        );
+
+      const resultCount =
+        document.getElementById(
+          "resultCount"
+        );
+
+      if (resultCount) {
+
+        resultCount.textContent =
+          "Unable to load products";
+      }
+
+      if (!grid) {
+        return;
+      }
+
+      grid.innerHTML = `
+        <div class="error-state">
+
+          <div class="error-icon">
+            ⚠️
+          </div>
+
+          <h3>
+            We couldn't load the hunts
+          </h3>
+
+          <p>
+            Please check your connection and try again.
+          </p>
+
+          <button onclick="retryDatabase()">
+            Try Again
+          </button>
+
+        </div>
+      `;
+    }
+
+    /*
+      ============================================================
+      RETRY
+      ============================================================
+    */
+
+    async function retryDatabase() {
+
+      if (!supabaseClient) {
+
+        showDatabaseError(
+          new Error(
+            "Supabase client unavailable."
+          )
+        );
+
+        return;
+      }
+
+      productsLoading = true;
+
+      renderProducts();
+
+      try {
+
+        await loadCategories();
+        await loadProducts();
+
+      } catch (error) {
+
+        showDatabaseError(
+          error
+        );
+      }
+    }
+
+    /*
+      ============================================================
+      INITIALIZE
+      ============================================================
+    */
+
+    async function init() {
+
+      createAnimatedTitle();
+
+      renderCategoryNav();
+
+      renderCategoryGrid();
+
+      normalizeCart();
+
+      renderCart();
+
+      updateCartCount();
+
+      setupSearch();
+
+      setupSort();
+
+      setupNewsletter();
+
+      if (!supabaseClient) {
+
+        showDatabaseError(
+          new Error(
+            "Supabase client could not be initialized."
+          )
+        );
+
+        return;
+      }
+
+      try {
+
+        await loadCategories();
+
+        await loadProducts();
+
+      } catch (error) {
+
+        showDatabaseError(
+          error
+        );
+      }
+    }
+
+    /*
+      ============================================================
+      START
+      ============================================================
+    */
+
+    if (
+      document.readyState ===
+      "loading"
+    ) {
+
+      document.addEventListener(
+        "DOMContentLoaded",
+        init
+      );
+
+    } else {
+
+      init();
+    }
+
+  </script>
+
+<!-- ============================================================
+     MIXH HUNTS WISHLIST
+     Add-on only. Does not replace existing cart/product code.
+     ============================================================ -->
+
+<style>
+  /* =========================
+     WISHLIST ADD-ON
+  ========================= */
+
+  .mh-wishlist-header-btn {
+    position: relative;
+  }
+
+  .mh-wishlist-count {
+    position: absolute;
+    top: -5px;
+    right: -3px;
+    width: 21px;
+    height: 21px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: #ff3b6b;
+    color: white;
+    font-size: 11px;
+    font-weight: 900;
+    border: 2px solid white;
+  }
+
+  .mh-wishlist-heart {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 10;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255,255,255,.96);
+    color: #6c3cff;
+    font-size: 22px;
+    line-height: 1;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 7px 20px rgba(40,25,90,.14);
+    transition:
+      transform .2s ease,
+      color .2s ease,
+      background .2s ease;
+  }
+
+  .mh-wishlist-heart:hover {
+    transform: scale(1.1);
+    background: white;
+  }
+
+  .mh-wishlist-heart.active {
+    color: #ff3b6b;
+    animation: mhWishlistPop .3s ease;
+  }
+
+  @keyframes mhWishlistPop {
+    0% {
+      transform: scale(1);
+    }
+
+    45% {
+      transform: scale(1.3);
+    }
+
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  .mh-wishlist-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(20,15,35,.45);
+    z-index: 2500;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: .3s ease;
+  }
+
+  .mh-wishlist-overlay.open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .mh-wishlist-drawer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: min(450px, 100%);
+    height: 100%;
+    background: white;
+    transform: translateX(100%);
+    transition: .35s ease;
+    display: flex;
+    flex-direction: column;
+    box-shadow: -20px 0 60px rgba(20,15,35,.18);
+  }
+
+  .mh-wishlist-overlay.open .mh-wishlist-drawer {
+    transform: translateX(0);
+  }
+
+  .mh-wishlist-header {
+    padding: 20px;
+    background:
+      linear-gradient(
+        120deg,
+        #6c3cff,
+        #ec4899,
+        #ff8a00
+      );
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .mh-wishlist-header h2 {
+    font-size: 21px;
+    margin: 0;
+  }
+
+  .mh-wishlist-close {
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255,255,255,.18);
+    color: white;
+    font-size: 21px;
+  }
+
+  .mh-wishlist-items {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+  }
+
+  .mh-wishlist-item {
+    display: grid;
+    grid-template-columns: 72px 1fr;
+    gap: 12px;
+    padding: 12px;
+    margin-bottom: 12px;
+    border: 1px solid var(--border);
+    border-radius: 17px;
+    background: white;
+  }
+
+  .mh-wishlist-image {
+    width: 72px;
+    height: 72px;
+    border-radius: 13px;
+    overflow: hidden;
+    background: #f5f3fa;
+    display: grid;
+    place-items: center;
+    font-size: 30px;
+  }
+
+  .mh-wishlist-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .mh-wishlist-info {
+    min-width: 0;
+  }
+
+  .mh-wishlist-name {
+    font-size: 14px;
+    font-weight: 900;
+    line-height: 1.35;
+    margin-bottom: 5px;
+  }
+
+  .mh-wishlist-price {
+    color: var(--purple);
+    font-size: 13px;
+    font-weight: 900;
+    margin-bottom: 9px;
+  }
+
+  .mh-wishlist-actions {
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+  }
+
+  .mh-wishlist-actions button {
+    border: none;
+    border-radius: 9px;
+    padding: 7px 10px;
+    font-size: 11px;
+    font-weight: 900;
+  }
+
+  .mh-wishlist-add {
+    background: var(--purple);
+    color: white;
+  }
+
+  .mh-wishlist-remove {
+    background: #fff0f3;
+    color: #e83e68;
+  }
+
+  .mh-wishlist-whatsapp {
+    display: inline-block;
+    text-decoration: none;
+    border-radius: 9px;
+    padding: 7px 10px;
+    background: #ebfff4;
+    color: var(--green);
+    font-size: 11px;
+    font-weight: 900;
+  }
+
+  .mh-wishlist-empty {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 30px;
+    color: var(--muted);
+  }
+
+  .mh-wishlist-empty-icon {
+    font-size: 58px;
+    margin-bottom: 12px;
+  }
+
+  .mh-wishlist-empty h3 {
+    color: var(--text);
+    margin-bottom: 7px;
+  }
+
+  .mh-wishlist-empty p {
+    line-height: 1.6;
+    max-width: 300px;
+  }
+
+  @media (max-width: 520px) {
+    .mh-wishlist-drawer {
+      width: 100%;
+    }
+
+    .mh-wishlist-heart {
+      width: 38px;
+      height: 38px;
+    }
+  }
+</style>
+
+<script>
+  /*
+    ============================================================
+    MIXH HUNTS WISHLIST ADD-ON
+    ============================================================
+
+    This section intentionally works independently from the
+    existing cart and product functions.
+
+    It does NOT replace:
+      - renderProducts()
+      - productCard()
+      - addToCart()
+      - cart
+      - Supabase
+      - existing UI
+  */
+
+  (function initMixhWishlist() {
+
+    const STORAGE_KEY =
+      "mixh_hunts_wishlist";
+
+    let wishlist = [];
+
+    /*
+      ==========================================================
+      STORAGE
+      ==========================================================
+    */
+
+    function loadWishlist() {
+
+      try {
+
+        const saved =
+          localStorage.getItem(
+            STORAGE_KEY
+          );
+
+        const parsed =
+          saved
+            ? JSON.parse(saved)
+            : [];
+
+        wishlist =
+          Array.isArray(parsed)
+            ? parsed.map(String)
+            : [];
+
+      } catch (error) {
+
+        console.warn(
+          "Mixh wishlist could not be loaded:",
+          error
+        );
+
+        wishlist = [];
+      }
+
+      wishlist = [
+        ...new Set(wishlist)
+      ];
+    }
+
+    function saveWishlist() {
+
+      try {
+
+        localStorage.setItem(
+          STORAGE_KEY,
+          JSON.stringify(wishlist)
+        );
+
+      } catch (error) {
+
+        console.warn(
+          "Mixh wishlist could not be saved:",
+          error
+        );
+      }
+
+      updateWishlistCount();
+    }
+
+    function isWishlisted(productId) {
+
+      return wishlist.includes(
+        String(productId)
+      );
+    }
+
+    /*
+      ==========================================================
+      HEADER BUTTON
+      ==========================================================
+    */
+
+    function createHeaderButton() {
+
+      const actions =
+        document.querySelector(
+          ".header-actions"
+        );
+
+      if (!actions) {
+        return;
+      }
+
+      if (
+        document.getElementById(
+          "mixhWishlistHeaderButton"
+        )
+      ) {
+        return;
+      }
+
+      const button =
+        document.createElement(
+          "button"
+        );
+
+      button.type = "button";
+
+      button.id =
+        "mixhWishlistHeaderButton";
+
+      button.className =
+        "header-btn mh-wishlist-header-btn";
+
+      button.setAttribute(
+        "aria-label",
+        "Open wishlist"
+      );
+
+      button.title =
+        "My Wishlist";
+
+      button.innerHTML = `
+        ❤️
+        <span
+          class="mh-wishlist-count"
+          id="mixhWishlistCount"
+        >
+          0
+        </span>
+      `;
+
+      button.addEventListener(
+        "click",
+        openWishlist
+      );
+
+      /*
+        Put Wishlist between Shop and Cart.
+      */
+
+      const cartButton =
+        actions.querySelector(
+          ".cart-btn"
+        );
+
+      if (cartButton) {
+
+        actions.insertBefore(
+          button,
+          cartButton
+        );
+
+      } else {
+
+        actions.appendChild(
+          button
+        );
+      }
+
+      updateWishlistCount();
+    }
+
+    function updateWishlistCount() {
+
+      const count =
+        document.getElementById(
+          "mixhWishlistCount"
+        );
+
+      if (!count) {
+        return;
+      }
+
+      count.textContent =
+        wishlist.length > 99
+          ? "99+"
+          : String(wishlist.length);
+
+      count.style.display =
+        wishlist.length
+          ? "grid"
+          : "none";
+    }
+
+    /*
+      ==========================================================
+      WISHLIST DRAWER
+      ==========================================================
+    */
+
+    function createWishlistDrawer() {
+
+      if (
+        document.getElementById(
+          "mixhWishlistOverlay"
+        )
+      ) {
+        return;
+      }
+
+      const overlay =
+        document.createElement(
+          "div"
+        );
+
+      overlay.id =
+        "mixhWishlistOverlay";
+
+      overlay.className =
+        "mh-wishlist-overlay";
+
+      overlay.innerHTML = `
+        <aside
+          class="mh-wishlist-drawer"
+          aria-label="Wishlist"
+        >
+
+          <div class="mh-wishlist-header">
+
+            <h2>
+              ❤️ My Wishlist
+            </h2>
+
+            <button
+              type="button"
+              class="mh-wishlist-close"
+              id="mixhWishlistClose"
+              aria-label="Close wishlist"
+            >
+              ×
+            </button>
+
+          </div>
+
+          <div
+            class="mh-wishlist-items"
+            id="mixhWishlistItems"
+          ></div>
+
+        </aside>
+      `;
+
+      document.body.appendChild(
+        overlay
+      );
+
+      document
+        .getElementById(
+          "mixhWishlistClose"
+        )
+        .addEventListener(
+          "click",
+          closeWishlist
+        );
+
+      overlay.addEventListener(
+        "click",
+        function(event) {
+
+          if (
+            event.target === overlay
+          ) {
+            closeWishlist();
+          }
+
+        }
+      );
+    }
+
+    function openWishlist() {
+
+      createWishlistDrawer();
+
+      renderWishlist();
+
+      const overlay =
+        document.getElementById(
+          "mixhWishlistOverlay"
+        );
+
+      if (!overlay) {
+        return;
+      }
+
+      overlay.classList.add(
+        "open"
+      );
+
+      document.body.style.overflow =
+        "hidden";
+    }
+
+    function closeWishlist() {
+
+      const overlay =
+        document.getElementById(
+          "mixhWishlistOverlay"
+        );
+
+      if (!overlay) {
+        return;
+      }
+
+      overlay.classList.remove(
+        "open"
+      );
+
+      document.body.style.overflow =
+        "";
+    }
+
+    /*
+      ==========================================================
+      PRODUCT LOOKUP
+      ==========================================================
+    */
+
+    function getWishlistProducts() {
+
+      if (
+        !Array.isArray(window.PRODUCTS) &&
+        typeof PRODUCTS === "undefined"
+      ) {
+        return [];
+      }
+
+      const productList =
+        typeof PRODUCTS !== "undefined"
+          ? PRODUCTS
+          : [];
+
+      return wishlist
+        .map(id => {
+
+          return productList.find(
+            product =>
+              String(product.id) ===
+              String(id)
+          );
+
+        })
+        .filter(Boolean);
+    }
+
+    /*
+      ==========================================================
+      TOGGLE WISHLIST
+      ==========================================================
+    */
+
+    function toggleWishlist(
+      productId,
+      event
+    ) {
+
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+
+      const id =
+        String(productId);
+
+      const product =
+        typeof getProduct === "function"
+          ? getProduct(id)
+          : null;
+
+      if (
+        !product
+      ) {
+        return;
+      }
+
+      if (
+        isWishlisted(id)
+      ) {
+
+        wishlist =
+          wishlist.filter(
+            savedId =>
+              String(savedId) !== id
+          );
+
+        if (
+          typeof showToast ===
+          "function"
+        ) {
+
+          showToast(
+            "Removed from wishlist"
+          );
+        }
+
+      } else {
+
+        wishlist.push(id);
+
+        if (
+          typeof showToast ===
+          "function"
+        ) {
+
+          showToast(
+            "❤️ Added to wishlist"
+          );
+        }
+      }
+
+      saveWishlist();
+
+      updateProductHearts();
+
+      renderWishlist();
+    }
+
+    /*
+      ==========================================================
+      PRODUCT CARD HEARTS
+      ==========================================================
+    */
+
+    function updateProductHearts() {
+
+      const cards =
+        document.querySelectorAll(
+          ".product-card"
+        );
+
+      if (!cards.length) {
+        return;
+      }
+
+      /*
+        The existing product renderer already controls
+        filtering and sorting.
+
+        We simply match each visible card with the same
+        product order returned by the existing function.
+      */
+
+      let visibleProducts = [];
+
+      try {
+
+        if (
+          typeof getFilteredProducts ===
+          "function"
+        ) {
+
+          visibleProducts =
+            getFilteredProducts();
+
+        }
+
+      } catch (error) {
+
+        console.warn(
+          "Could not read Mixh products:",
+          error
+        );
+
+        return;
+      }
+
+      cards.forEach(
+        (card, index) => {
+
+          const product =
+            visibleProducts[index];
+
+          if (!product) {
+            return;
+          }
+
+          card.dataset.mixhProductId =
+            String(product.id);
+
+          const image =
+            card.querySelector(
+              ".product-image"
+            );
+
+          if (!image) {
+            return;
+          }
+
+          let heart =
+            image.querySelector(
+              ".mh-wishlist-heart"
+            );
+
+          if (!heart) {
+
+            heart =
+              document.createElement(
+                "button"
+              );
+
+            heart.type = "button";
+
+            heart.className =
+              "mh-wishlist-heart";
+
+            image.appendChild(
+              heart
+            );
+          }
+
+          const active =
+            isWishlisted(
+              product.id
+            );
+
+          heart.classList.toggle(
+            "active",
+            active
+          );
+
+          heart.innerHTML =
+            active
+              ? "♥"
+              : "♡";
+
+          heart.setAttribute(
+            "aria-label",
+            active
+              ? "Remove from wishlist"
+              : "Add to wishlist"
+          );
+
+          heart.title =
+            active
+              ? "Remove from wishlist"
+              : "Add to wishlist";
+
+          /*
+            Avoid stacking multiple click handlers.
+          */
+
+          heart.onclick = function(event) {
+
+            toggleWishlist(
+              product.id,
+              event
+            );
+
+          };
+        }
+      );
+    }
+
+    /*
+      ==========================================================
+      WISHLIST DRAWER CONTENT
+      ==========================================================
+    */
+
+    function renderWishlist() {
+
+      const container =
+        document.getElementById(
+          "mixhWishlistItems"
+        );
+
+      if (!container) {
+        return;
+      }
+
+      const products =
+        getWishlistProducts();
+
+      /*
+        Remove products that no longer exist
+        in the database.
+      */
+
+      const validIds =
+        products.map(
+          product =>
+            String(product.id)
+        );
+
+      if (
+        validIds.length !==
+        wishlist.length
+      ) {
+
+        wishlist =
+          wishlist.filter(
+            id =>
+              validIds.includes(
+                String(id)
+              )
+          );
+
+        saveWishlist();
+      }
+
+      if (!products.length) {
+
+        container.innerHTML = `
+          <div class="mh-wishlist-empty">
+
+            <div class="mh-wishlist-empty-icon">
+              ♡
+            </div>
+
+            <h3>
+              Your wishlist is empty
+            </h3>
+
+            <p>
+              Tap the heart on products you like
+              and they'll appear here.
+            </p>
+
+          </div>
+        `;
+
+        return;
+      }
+
+      container.innerHTML =
+        products.map(
+          product => {
+
+            const image =
+              safeText(
+                product.image
+              ).trim();
+
+            const price =
+              typeof formatPrice ===
+              "function"
+                ? formatPrice(
+                    product.price
+                  )
+                : "Contact for price";
+
+            const whatsappText =
+              encodeURIComponent(
+                `Hello Mixh Hunts, I'm interested in ${safeText(product.name)}. Is it still available?`
+              );
+
+            return `
+              <div
+                class="mh-wishlist-item"
+                data-wishlist-product="${escapeHtml(product.id)}"
+              >
+
+                <div class="mh-wishlist-image">
+
+                  ${
+                    image
+                      ? `
+                        <img
+                          src="${escapeHtml(image)}"
+                          alt="${escapeHtml(product.name)}"
+                        >
+                      `
+                      : escapeHtml(
+                          product.icon ||
+                          "📦"
+                        )
+                  }
+
+                </div>
+
+                <div class="mh-wishlist-info">
+
+                  <div class="mh-wishlist-name">
+                    ${escapeHtml(product.name)}
+                  </div>
+
+                  <div class="mh-wishlist-price">
+                    ${escapeHtml(price)}
+                  </div>
+
+                  <div class="mh-wishlist-actions">
+
+                    <button
+                      type="button"
+                      class="mh-wishlist-add"
+                      data-wishlist-add="${escapeHtml(product.id)}"
+                    >
+                      🛒 Add to Cart
+                    </button>
+
+                    <button
+                      type="button"
+                      class="mh-wishlist-remove"
+                      data-wishlist-remove="${escapeHtml(product.id)}"
+                    >
+                      ♡ Remove
+                    </button>
+
+                    <a
+                      class="mh-wishlist-whatsapp"
+                      href="https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappText}"
+                      target="_blank"
+                      rel="noopener"
+                    >
+                      💬 Ask
+                    </a>
+
+                  </div>
+
+                </div>
+
+              </div>
+            `;
+
+          }
+        ).join("");
+
+      /*
+        Add-to-cart buttons
+      */
+
+      container
+        .querySelectorAll(
+          "[data-wishlist-add]"
+        )
+        .forEach(
+          button => {
+
+            button.addEventListener(
+              "click",
+              function() {
+
+                const id =
+                  this.dataset.wishlistAdd;
+
+                if (
+                  typeof addToCart ===
+                  "function"
+                ) {
+
+                  addToCart(id);
+
+                  closeWishlist();
+                }
+
+              }
+            );
+
+          }
+        );
+
+      /*
+        Remove buttons
+      */
+
+      container
+        .querySelectorAll(
+          "[data-wishlist-remove]"
+        )
+        .forEach(
+          button => {
+
+            button.addEventListener(
+              "click",
+              function() {
+
+                const id =
+                  this.dataset.wishlistRemove;
+
+                wishlist =
+                  wishlist.filter(
+                    savedId =>
+                      String(savedId) !==
+                      String(id)
+                  );
+
+                saveWishlist();
+
+                updateProductHearts();
+
+                renderWishlist();
+
+                if (
+                  typeof showToast ===
+                  "function"
+                ) {
+
+                  showToast(
+                    "Removed from wishlist"
+                  );
+                }
+
+              }
+            );
+
+          }
+        );
+    }
+
+    /*
+      ==========================================================
+      KEEP HEARTS UPDATED WHEN PRODUCTS RENDER
+      ==========================================================
+    */
+
+    function watchProductGrid() {
+
+      const grid =
+        document.getElementById(
+          "productsGrid"
+        );
+
+      if (!grid) {
+        return;
+      }
+
+      const observer =
+        new MutationObserver(
+          function() {
+
+            /*
+              Small delay allows the existing
+              Mixh renderer to finish replacing
+              the product cards first.
+            */
+
+            setTimeout(
+              updateProductHearts,
+              0
+            );
+
+          }
+        );
+
+      observer.observe(
+        grid,
+        {
+          childList: true,
+          subtree: true
+        }
+      );
+    }
+
+    /*
+      ==========================================================
+      KEYBOARD SUPPORT
+      ==========================================================
+    */
+
+    document.addEventListener(
+      "keydown",
+      function(event) {
+
+        if (
+          event.key === "Escape"
+        ) {
+
+          closeWishlist();
+        }
+
+      }
+    );
+
+    /*
+      ==========================================================
+      START WISHLIST
+      ==========================================================
+    */
+
+    function startWishlist() {
+
+      loadWishlist();
+
+      createHeaderButton();
+
+      createWishlistDrawer();
+
+      updateWishlistCount();
+
+      /*
+        Wait for the existing Mixh
+        product system to initialize.
+      */
+
+      setTimeout(
+        updateProductHearts,
+        500
+      );
+
+      watchProductGrid();
+    }
+
+    if (
+      document.readyState ===
+      "loading"
+    ) {
+
+      document.addEventListener(
+        "DOMContentLoaded",
+        startWishlist
+      );
+
+    } else {
+
+      startWishlist();
+    }
+
+  })();
+</script>
+
+</body>
+</html>
