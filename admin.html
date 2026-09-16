@@ -1405,25 +1405,95 @@ function showToast(message, type = "") {
 
   toastTimer = setTimeout(() => {
     toast.classList.remove("show");
-  }, 3000);
-}
-
-
-/* =========================================================
+  }, 
+  /* =========================================================
    AUTH
 ========================================================= */
 
-async function checkSession() {
+const MIXH_ADMIN_UID =
+  "f9a0b5be-16c4-4d49-a24e-581b5214fc3a";
+
+
+async function getVerifiedUser() {
 
   const {
-    data: { session }
-  } = await supabaseClient.auth.getSession();
+    data: { user },
+    error
+  } = await supabaseClient.auth.getUser();
 
-  if (session) {
-    await showAdmin(session.user);
-  } else {
-    showLogin();
+  if (error) {
+    console.error("Auth verification error:", error);
+    return null;
   }
+
+  if (!user) {
+    return null;
+  }
+
+  return user;
+}
+
+
+async function requireAdminSession() {
+
+  const user = await getVerifiedUser();
+
+  if (!user) {
+
+    showLogin();
+
+    showToast(
+      "Your admin session has expired. Please sign in again.",
+      "error"
+    );
+
+    return null;
+  }
+
+  if (user.id !== MIXH_ADMIN_UID) {
+
+    console.error(
+      "Unauthorized admin UID:",
+      user.id
+    );
+
+    await supabaseClient.auth.signOut();
+
+    showLogin();
+
+    showToast(
+      "This account is not authorized as a Mixh Hunts admin.",
+      "error"
+    );
+
+    return null;
+  }
+
+  currentUser = user;
+
+  return user;
+}
+
+
+async function checkSession() {
+
+  const user = await getVerifiedUser();
+
+  if (!user) {
+    showLogin();
+    return;
+  }
+
+  if (user.id !== MIXH_ADMIN_UID) {
+
+    await supabaseClient.auth.signOut();
+
+    showLogin();
+
+    return;
+  }
+
+  await showAdmin(user);
 }
 
 
@@ -1452,10 +1522,14 @@ $("loginForm").addEventListener("submit", async (event) => {
 
   event.preventDefault();
 
-  const email = $("loginEmail").value.trim();
-  const password = $("loginPassword").value;
+  const email =
+    $("loginEmail").value.trim();
 
-  const errorBox = $("loginError");
+  const password =
+    $("loginPassword").value;
+
+  const errorBox =
+    $("loginError");
 
   errorBox.style.display = "none";
   errorBox.textContent = "";
@@ -1465,18 +1539,34 @@ $("loginForm").addEventListener("submit", async (event) => {
     const {
       data,
       error
-    } = await supabaseClient.auth.signInWithPassword({
-      email,
-      password
-    });
+    } =
+      await supabaseClient.auth.signInWithPassword({
+        email,
+        password
+      });
 
     if (error) {
       throw error;
     }
 
+    if (!data.user) {
+      throw new Error("Login succeeded but no user was returned.");
+    }
+
+    if (data.user.id !== MIXH_ADMIN_UID) {
+
+      await supabaseClient.auth.signOut();
+
+      throw new Error(
+        "This Supabase account is not authorized as a Mixh Hunts admin."
+      );
+    }
+
     await showAdmin(data.user);
 
   } catch (error) {
+
+    console.error("Login error:", error);
 
     errorBox.textContent =
       error.message || "Login failed.";
@@ -1500,12 +1590,32 @@ supabaseClient.auth.onAuthStateChange(
   async (event, session) => {
 
     if (event === "SIGNED_OUT") {
+
+      currentUser = null;
+
       showLogin();
+
+      return;
+    }
+
+    if (
+      event === "SIGNED_IN" ||
+      event === "TOKEN_REFRESHED"
+    ) {
+
+      if (session?.user) {
+
+        currentUser = session.user;
+
+        $("loginScreen").style.display = "none";
+        $("app").style.display = "block";
+        $("userEmail").textContent =
+          session.user.email || "Admin";
+      }
     }
 
   }
 );
-
 
 /* =========================================================
    NAVIGATION
@@ -2224,11 +2334,7 @@ window.editProduct = function(id) {
     return;
   }
 
-  openProductModal(product);
-};
-
-
-/* =========================================================
+  /* =========================================================
    ENABLE / DISABLE PRODUCT
 ========================================================= */
 
@@ -2236,6 +2342,13 @@ window.toggleProduct = async function(
   id,
   currentlyActive
 ) {
+
+  const adminUser =
+    await requireAdminSession();
+
+  if (!adminUser) {
+    return;
+  }
 
   const action =
     currentlyActive
@@ -2251,37 +2364,55 @@ window.toggleProduct = async function(
     return;
   }
 
-  const {
-    error
-  } = await supabaseClient
-    .from("products")
-    .update({
-      is_active: !currentlyActive
-    })
-    .eq("id", id);
+  try {
 
-  if (error) {
+    const {
+      data,
+      error
+    } = await supabaseClient
+      .from("products")
+      .update({
+        is_active: !currentlyActive
+      })
+      .eq("id", id)
+      .select("id, is_active")
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    if (!data) {
+      throw new Error(
+        "The product could not be updated."
+      );
+    }
 
     showToast(
-      error.message,
-      "error"
+      currentlyActive
+        ? "Product disabled."
+        : "Product enabled.",
+      "success"
     );
 
-    return;
+    await loadProducts();
+
+  } catch (error) {
+
+    console.error(
+      "Product status update error:",
+      error
+    );
+
+    showToast(
+      error.message ||
+      "Could not update product.",
+      "error"
+    );
   }
-
-  showToast(
-    currentlyActive
-      ? "Product disabled."
-      : "Product enabled.",
-    "success"
-  );
-
-  await loadProducts();
 };
 
-
-/* =========================================================
+/* ===================================================
    CATEGORIES
 ========================================================= */
 
