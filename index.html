@@ -1,0 +1,1983 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#0d0d12" />
+<title>Mixh Hunts | Find It. Love It. Get It.</title>
+
+<style>
+  /* ============================================================
+     DESIGN TOKENS - Shadow-inspired dark palette
+     Change these variables to re-theme the whole storefront.
+  ============================================================ */
+  :root{
+    --shadow-black:#07070a;
+    --obsidian:#0d0d12;
+    --surface:#14141b;
+    --surface-light:#1b1b24;
+
+    --crimson:#b5122f;
+    --crimson-bright:#e21b3c;
+    --crimson-dark:#720d20;
+
+    --violet-shadow:#5b3cc4;
+    --violet-soft:#8b6cff;
+    --violet-electric:#7c4dff;
+    --graphite:#1f1f28;
+
+    --silver:#d8d8df;
+    --muted:#92929d;
+    --white:#f5f5f7;
+
+    --border:rgba(255,255,255,0.08);
+    --border-strong:rgba(255,255,255,0.16);
+    --glass:rgba(255,255,255,0.045);
+
+    --success:#2fbf6f;
+    --whatsapp:#1f9e56;
+
+    --radius-lg:22px;
+    --radius:16px;
+    --radius-sm:10px;
+
+    --shadow-elev:0 24px 60px rgba(0,0,0,0.55);
+    --shadow-soft:0 10px 30px rgba(0,0,0,0.35);
+    --glow-crimson:0 0 0 1px rgba(226,27,60,0.25), 0 8px 30px rgba(181,18,47,0.28);
+    --glow-violet:0 0 40px rgba(139,108,255,0.18);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Arial,sans-serif;
+    background:var(--shadow-black);
+    color:var(--white);
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  button,input,select,textarea{font:inherit;color:inherit;}
+  button{cursor:pointer;}
+  a{color:inherit;text-decoration:none;}
+  img{max-width:100%;display:block;}
+  ::selection{background:var(--crimson);color:white;}
+
+  .visually-hidden{
+    position:absolute!important;width:1px;height:1px;overflow:hidden;
+    clip:rect(0,0,0,0);white-space:nowrap;
+  }
+
+  /* ============================================================
+     ATMOSPHERE / CINEMATIC BACKGROUND (restrained, CSS-only)
+  ============================================================ */
+  .atmosphere{
+    position:fixed;inset:0;z-index:-1;pointer-events:none;
+    background:
+      radial-gradient(circle at 18% 8%, rgba(181,18,47,0.10), transparent 30%),
+      radial-gradient(circle at 85% 25%, rgba(91,60,196,0.10), transparent 32%),
+      radial-gradient(circle at 50% 100%, rgba(181,18,47,0.06), transparent 40%),
+      var(--shadow-black);
+  }
+  .atmosphere::before{
+    content:"";position:absolute;inset:0;opacity:0.35;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size:46px 46px;
+    mask-image:radial-gradient(circle at 50% 0%, black, transparent 75%);
+  }
+
+  /* ============================================================
+     HEADER
+  ============================================================ */
+  header{
+    position:sticky;top:0;z-index:1000;
+    background:rgba(13,13,18,0.86);
+    backdrop-filter:blur(18px);
+    border-bottom:1px solid var(--border);
+  }
+  .header-inner{
+    max-width:1280px;margin:auto;min-height:74px;padding:12px 20px;
+    display:flex;align-items:center;gap:18px;
+  }
+  .brand{
+    display:flex;align-items:center;gap:10px;min-width:max-content;
+  }
+  .brand-mark{
+    width:38px;height:38px;border-radius:11px;
+    background:linear-gradient(135deg, var(--crimson-dark), var(--crimson-bright));
+    display:grid;place-items:center;font-weight:900;font-size:15px;
+    box-shadow:var(--glow-crimson);
+    color:white;
+  }
+  .brand-text{font-size:19px;font-weight:800;letter-spacing:-0.4px;}
+  .brand-text .accent{color:var(--crimson-bright);}
+  .brand-tagline{
+    display:none;font-size:10px;color:var(--muted);letter-spacing:0.14em;text-transform:uppercase;
+    margin-top:1px;
+  }
+
+  .search-wrap{flex:1;position:relative;max-width:560px;margin:0 auto;}
+  .search-wrap input{
+    width:100%;border:1px solid var(--border);border-radius:999px;
+    padding:12px 44px 12px 18px;outline:none;background:var(--surface);
+    color:var(--white);transition:0.2s ease;
+  }
+  .search-wrap input::placeholder{color:var(--muted);}
+  .search-wrap input:focus{
+    border-color:var(--violet-electric);
+    box-shadow:0 0 0 3px rgba(124,77,255,0.18);
+    background:var(--surface-light);
+  }
+  .search-icon{position:absolute;right:16px;top:50%;transform:translateY(-50%);opacity:0.6;pointer-events:none;}
+
+  .header-actions{display:flex;align-items:center;gap:8px;}
+  .icon-btn{
+    position:relative;border:1px solid var(--border);background:var(--surface);
+    border-radius:12px;width:44px;height:44px;display:grid;place-items:center;
+    font-size:18px;transition:0.2s ease;
+  }
+  .icon-btn:hover{border-color:var(--border-strong);background:var(--surface-light);transform:translateY(-1px);}
+  .icon-badge{
+    position:absolute;top:-6px;right:-6px;min-width:19px;height:19px;padding:0 4px;
+    border-radius:999px;background:var(--crimson-bright);color:white;
+    font-size:10.5px;font-weight:800;display:grid;place-items:center;
+    border:2px solid var(--obsidian);
+  }
+  .icon-badge.hidden{display:none;}
+  .whatsapp-header-btn{background:rgba(31,158,86,0.12);border-color:rgba(31,158,86,0.3);color:#5fe0a0;}
+  .whatsapp-header-btn:hover{background:rgba(31,158,86,0.2);}
+
+  /* CATEGORY NAV STRIP */
+  .category-nav-row{border-top:1px solid var(--border);background:rgba(20,20,27,0.7);}
+  .category-nav{
+    max-width:1280px;margin:auto;padding:10px 20px;display:flex;gap:8px;
+    overflow-x:auto;scrollbar-width:none;
+  }
+  .category-nav::-webkit-scrollbar{display:none;}
+  .category-pill{
+    white-space:nowrap;border:1px solid var(--border);background:var(--surface);
+    padding:9px 15px;border-radius:999px;font-weight:700;font-size:13px;color:var(--silver);
+    transition:0.2s ease;position:relative;
+  }
+  .category-pill:hover{border-color:var(--border-strong);}
+  .category-pill.active{
+    background:linear-gradient(120deg, var(--violet-shadow), var(--crimson));border-color:var(--crimson-bright);color:white;
+    box-shadow:var(--glow-crimson);
+  }
+  .category-pill.active::after{
+    content:"";position:absolute;left:18%;right:18%;bottom:-11px;height:2px;
+    background:var(--crimson-bright);
+  }
+
+  /* ============================================================
+     HERO
+  ============================================================ */
+  .hero{position:relative;overflow:hidden;padding:80px 20px 70px;}
+  .hero-glow{
+    position:absolute;inset:0;pointer-events:none;
+    background:
+      radial-gradient(ellipse 60% 50% at 30% 20%, rgba(181,18,47,0.18), transparent 60%),
+      radial-gradient(ellipse 50% 45% at 80% 60%, rgba(91,60,196,0.16), transparent 60%);
+  }
+  .hero-streak{
+    position:absolute;top:18%;left:-20%;width:60%;height:1px;
+    background:linear-gradient(90deg, transparent, rgba(226,27,60,0.5), transparent);
+    animation:streakMove 7s ease-in-out infinite;pointer-events:none;
+  }
+  @keyframes streakMove{
+    0%{transform:translateX(0);opacity:0;}
+    10%{opacity:1;}
+    50%{transform:translateX(160%);opacity:0.6;}
+    90%{opacity:0;}
+    100%{transform:translateX(180%);opacity:0;}
+  }
+  .hero-inner{position:relative;z-index:2;max-width:1280px;margin:auto;text-align:center;}
+  .hero-eyebrow{
+    display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border-strong);
+    background:var(--glass);border-radius:999px;padding:8px 16px;font-size:12px;
+    font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--silver);
+    margin-bottom:26px;
+  }
+  .hero-eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--crimson-bright);
+    box-shadow:0 0 8px var(--crimson-bright);}
+  .hero h1{
+    font-size:clamp(40px,7.2vw,84px);line-height:1.02;letter-spacing:-2.5px;
+    margin-bottom:22px;font-weight:800;
+  }
+  .hero h1 .hero-word{display:inline-block;white-space:nowrap;}
+  .hero h1 .hero-letter{display:inline-block;animation:letterFloat 4s ease-in-out infinite;will-change:transform;}
+  .hero h1 .hero-letter.accent{color:var(--crimson-bright);}
+  .hero h1 .hero-space{display:inline-block;width:0.28em;min-width:0.28em;}
+  @keyframes letterFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);}}
+  .hero p{max-width:560px;margin:0 auto 34px;color:var(--muted);font-size:16px;line-height:1.7;}
+  .hero-buttons{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;}
+  .btn{
+    border:none;border-radius:999px;padding:14px 24px;font-weight:800;font-size:14px;
+    transition:0.2s ease;display:inline-flex;align-items:center;gap:8px;
+  }
+  .btn-primary{background:var(--crimson);color:white;box-shadow:var(--glow-crimson);}
+  .btn-primary:hover{background:var(--crimson-bright);transform:translateY(-2px);}
+  .btn-ghost{background:var(--glass);color:var(--white);border:1px solid var(--border-strong);}
+  .btn-ghost:hover{background:var(--surface-light);transform:translateY(-2px);}
+  .btn-whatsapp{background:var(--whatsapp);color:white;}
+  .btn-whatsapp:hover{background:#25b566;transform:translateY(-2px);}
+
+  /* ============================================================
+     MAIN / SECTIONS
+  ============================================================ */
+  main{max-width:1280px;margin:auto;padding:60px 20px;}
+  .section-label{
+    font-size:11px;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;
+    color:var(--crimson-bright);margin-bottom:8px;
+  }
+  .section-heading{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;margin-bottom:24px;flex-wrap:wrap;}
+  .section-heading h2{font-size:26px;letter-spacing:-0.6px;font-weight:800;}
+  .section-heading p{color:var(--muted);margin-top:6px;font-size:14px;}
+
+  /* CATEGORY GRID */
+  .category-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-bottom:64px;}
+  .category-card{
+    border:1px solid var(--border);background:var(--surface);border-radius:var(--radius);
+    padding:22px 12px;text-align:center;transition:0.2s ease;
+  }
+  .category-card:hover{border-color:var(--border-strong);transform:translateY(-4px);box-shadow:var(--shadow-soft);}
+  .category-card .cat-icon{font-size:30px;margin-bottom:8px;}
+  .category-card strong{display:block;font-size:13px;font-weight:800;}
+  .category-card small{color:var(--muted);font-size:11px;}
+
+  /* PROMO BANNER */
+  .promo-banner{
+    margin-bottom:64px;border-radius:var(--radius-lg);padding:32px;
+    background:linear-gradient(120deg, var(--surface), var(--surface-light));
+    border:1px solid var(--border-strong);
+    display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
+    position:relative;overflow:hidden;
+  }
+  .promo-banner::before{
+    content:"";position:absolute;top:-40%;right:-10%;width:280px;height:280px;border-radius:50%;
+    background:radial-gradient(circle, rgba(181,18,47,0.2), transparent 70%);
+  }
+  .promo-banner h2{font-size:22px;margin-bottom:6px;position:relative;z-index:1;}
+  .promo-banner p{color:var(--muted);position:relative;z-index:1;}
+
+  /* PRODUCT TOOLBAR */
+  .product-toolbar{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:20px;flex-wrap:wrap;}
+  .result-count{color:var(--muted);font-size:13px;}
+  .sort-select{
+    border:1px solid var(--border);background:var(--surface);color:var(--white);
+    border-radius:var(--radius-sm);padding:10px 13px;outline:none;
+  }
+
+  /* PRODUCT GRID */
+  .products-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+  .product-card{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    overflow:hidden;transition:0.25s ease;cursor:pointer;
+    animation:cardAppear 0.5s ease both;
+  }
+  @keyframes cardAppear{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+  .product-card:hover{border-color:var(--border-strong);transform:translateY(-5px);box-shadow:var(--shadow-soft), 0 0 0 1px rgba(139,108,255,0.12);}
+  .product-image{
+    height:200px;background:var(--obsidian);position:relative;overflow:hidden;
+    display:grid;place-items:center;
+  }
+  .product-image img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s ease;}
+  .product-card:hover .product-image img{transform:scale(1.05);}
+  .product-placeholder{font-size:54px;opacity:0.5;}
+  .wishlist-heart{
+    position:absolute;top:10px;left:10px;z-index:2;width:36px;height:36px;border:none;border-radius:50%;
+    background:rgba(7,7,10,0.65);backdrop-filter:blur(6px);color:var(--silver);font-size:17px;
+    display:grid;place-items:center;transition:0.2s ease;
+  }
+  .wishlist-heart:hover{background:rgba(7,7,10,0.85);}
+  .wishlist-heart.active{color:var(--crimson-bright);}
+  .card-badge{
+    position:absolute;top:10px;right:10px;z-index:2;background:var(--crimson);color:white;
+    padding:5px 9px;border-radius:999px;font-size:10px;font-weight:800;
+  }
+  .stock-chip{
+    position:absolute;bottom:10px;right:10px;z-index:2;background:rgba(7,7,10,0.7);
+    color:#5fe0a0;padding:5px 9px;border-radius:999px;font-size:10px;font-weight:800;
+    border:1px solid rgba(95,224,160,0.25);
+  }
+  .stock-chip.out{color:#ff6b6b;border-color:rgba(255,107,107,0.25);}
+  .product-info{padding:16px;}
+  .product-brand{
+    color:var(--crimson-bright);text-transform:uppercase;letter-spacing:0.08em;font-size:10px;font-weight:800;margin-bottom:6px;
+  }
+  .product-name{font-size:15px;font-weight:800;margin-bottom:5px;line-height:1.3;}
+  .product-variant{color:var(--muted);font-size:12px;margin-bottom:12px;}
+  .product-bottom{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+  .price{font-size:17px;font-weight:900;color:var(--white);}
+  .price.contact{font-size:13px;color:var(--violet-soft);}
+  .add-cart-btn{
+    width:100%;border:none;background:var(--crimson);color:white;padding:11px;border-radius:var(--radius-sm);
+    font-weight:800;font-size:13px;transition:0.2s ease;
+  }
+  .add-cart-btn:hover{background:var(--crimson-bright);}
+  .add-cart-btn:disabled{background:var(--surface-light);color:var(--muted);cursor:not-allowed;}
+
+  .empty-state,.loading-state,.error-state{
+    grid-column:1/-1;text-align:center;padding:60px 20px;background:var(--surface);
+    border:1px solid var(--border);border-radius:var(--radius-lg);
+  }
+  .empty-state .icon,.error-state .icon{font-size:42px;margin-bottom:12px;}
+  .empty-state p,.error-state p,.loading-state p{color:var(--muted);margin:8px 0 16px;}
+  .empty-state button,.error-state button{
+    border:none;background:var(--crimson);color:white;padding:11px 18px;border-radius:999px;font-weight:800;
+  }
+  .spinner{
+    width:40px;height:40px;margin:0 auto 14px;border:3px solid var(--border);
+    border-top-color:var(--crimson-bright);border-radius:50%;animation:spin 0.8s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  /* WHY / TRUST SECTION */
+  .why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:70px;}
+  .why-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px;}
+  .why-card .why-icon{font-size:26px;margin-bottom:10px;}
+  .why-card h3{font-size:15px;margin-bottom:6px;}
+  .why-card p{color:var(--muted);font-size:13px;line-height:1.6;}
+
+  /* NEWSLETTER */
+  .newsletter{
+    margin-top:64px;border-radius:var(--radius-lg);padding:32px;
+    background:linear-gradient(135deg, var(--obsidian), var(--surface) 55%, rgba(91,60,196,0.14));
+    border:1px solid var(--border-strong);position:relative;overflow:hidden;
+  }
+  .newsletter::before{
+    content:"";position:absolute;bottom:-50%;left:-10%;width:260px;height:260px;border-radius:50%;
+    background:radial-gradient(circle, rgba(91,60,196,0.22), transparent 70%);
+  }
+  .newsletter-content{position:relative;z-index:1;max-width:640px;}
+  .newsletter h2{font-size:22px;margin-bottom:6px;}
+  .newsletter p{color:var(--muted);line-height:1.6;margin-bottom:18px;}
+  .newsletter-form{display:flex;gap:10px;flex-wrap:wrap;}
+  .newsletter-form input{
+    flex:1;min-width:200px;border:1px solid var(--border);background:var(--obsidian);color:var(--white);
+    border-radius:999px;padding:13px 16px;outline:none;
+  }
+  .newsletter-form button{
+    border:none;border-radius:999px;padding:13px 20px;background:var(--crimson);color:white;font-weight:800;
+    white-space:nowrap;
+  }
+  .newsletter-form button:disabled{opacity:0.6;cursor:wait;}
+  .newsletter-message{margin-top:10px;font-size:13px;font-weight:700;color:var(--silver);min-height:18px;}
+
+  /* GET IN TOUCH */
+  .contact-section{
+    margin-top:64px;border-radius:var(--radius-lg);padding:36px;
+    background:linear-gradient(150deg, var(--graphite), var(--obsidian) 60%);
+    border:1px solid var(--border-strong);position:relative;overflow:hidden;
+  }
+  .contact-section::before{
+    content:"";position:absolute;top:-30%;right:-8%;width:320px;height:320px;border-radius:50%;
+    background:radial-gradient(circle, rgba(139,108,255,0.16), transparent 70%);
+  }
+  .contact-section::after{
+    content:"";position:absolute;bottom:-35%;left:-6%;width:240px;height:240px;border-radius:50%;
+    background:radial-gradient(circle, rgba(181,18,47,0.12), transparent 70%);
+  }
+  .contact-inner{position:relative;z-index:1;}
+  .contact-inner > p{color:var(--muted);max-width:520px;margin-bottom:24px;line-height:1.6;}
+  .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .contact-card{
+    background:var(--glass);border:1px solid var(--border-strong);border-radius:var(--radius);
+    padding:22px;display:flex;flex-direction:column;gap:10px;transition:0.2s ease;
+  }
+  .contact-card:hover{transform:translateY(-3px);border-color:rgba(255,255,255,0.24);}
+  .contact-icon{
+    width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:19px;color:white;
+  }
+  .contact-icon.wa{background:linear-gradient(135deg, var(--whatsapp), #14733a);}
+  .contact-icon.mail{background:linear-gradient(135deg, var(--violet-shadow), var(--violet-electric));}
+  .contact-card h3{font-size:15px;font-weight:800;}
+  .contact-card p{color:var(--muted);font-size:12.5px;line-height:1.5;}
+  .contact-link{
+    font-weight:800;font-size:13.5px;word-break:break-all;
+  }
+  .contact-link.wa-link{color:#5fe0a0;}
+  .contact-link.mail-link{color:var(--violet-soft);}
+  .contact-link:hover{text-decoration:underline;}
+
+  /* ============================================================
+     PRODUCT DETAIL MODAL
+  ============================================================ */
+  .modal-overlay{
+    position:fixed;inset:0;background:rgba(4,4,6,0.75);z-index:3000;
+    display:flex;align-items:center;justify-content:center;padding:16px;
+    opacity:0;pointer-events:none;transition:0.2s ease;
+  }
+  .modal-overlay.open{opacity:1;pointer-events:auto;}
+  .product-modal{
+    width:100%;max-width:920px;max-height:92vh;overflow-y:auto;background:var(--surface);
+    border:1px solid var(--border-strong);border-radius:var(--radius-lg);box-shadow:var(--shadow-elev);
+  }
+  .modal-top{display:flex;justify-content:flex-end;padding:14px 14px 0;}
+  .modal-close{
+    width:36px;height:36px;border:none;border-radius:50%;background:var(--surface-light);
+    color:var(--white);font-size:19px;
+  }
+  .modal-body{display:grid;grid-template-columns:1fr 1fr;gap:28px;padding:8px 28px 32px;}
+  .gallery-main{
+    aspect-ratio:1/1;background:var(--obsidian);border-radius:var(--radius);overflow:hidden;
+    display:grid;place-items:center;margin-bottom:12px;border:1px solid var(--border);
+  }
+  .gallery-main img{width:100%;height:100%;object-fit:cover;}
+  .gallery-thumbs{display:flex;gap:8px;flex-wrap:wrap;}
+  .gallery-thumb{
+    width:56px;height:56px;border-radius:9px;overflow:hidden;border:2px solid transparent;
+    opacity:0.6;transition:0.15s ease;background:var(--obsidian);
+  }
+  .gallery-thumb img{width:100%;height:100%;object-fit:cover;}
+  .gallery-thumb.active{border-color:var(--crimson-bright);opacity:1;}
+  .modal-details h3.brand{
+    color:var(--crimson-bright);text-transform:uppercase;font-size:11px;font-weight:800;letter-spacing:0.08em;margin-bottom:8px;
+  }
+  .modal-details h2{font-size:24px;margin-bottom:10px;letter-spacing:-0.5px;}
+  .modal-price{font-size:26px;font-weight:900;margin-bottom:14px;}
+  .modal-price.contact{font-size:16px;color:var(--violet-soft);}
+  .modal-meta-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
+  .meta-chip{
+    background:var(--obsidian);border:1px solid var(--border);border-radius:999px;padding:6px 11px;
+    font-size:11px;font-weight:700;color:var(--silver);
+  }
+  .modal-description{color:var(--muted);font-size:14px;line-height:1.7;margin-bottom:18px;}
+  .spec-block{margin-bottom:20px;}
+  .spec-block h4{font-size:12px;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:10px;}
+  .spec-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;}
+  .spec-row{
+    display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid var(--border);padding-bottom:6px;
+    font-size:13px;
+  }
+  .spec-key{color:var(--muted);}
+  .spec-value{font-weight:700;text-align:right;}
+  .modal-actions{display:flex;gap:10px;flex-wrap:wrap;}
+  .modal-actions .btn{flex:1;justify-content:center;min-width:150px;}
+  .modal-heart{
+    width:48px;height:48px;border-radius:50%;border:1px solid var(--border-strong);background:var(--obsidian);
+    display:grid;place-items:center;font-size:19px;flex:none!important;min-width:48px!important;
+  }
+  .modal-heart.active{color:var(--crimson-bright);border-color:var(--crimson-bright);}
+
+  /* ============================================================
+     CART & WISHLIST DRAWERS
+  ============================================================ */
+  .drawer-overlay{
+    position:fixed;inset:0;background:rgba(4,4,6,0.7);z-index:2500;
+    opacity:0;visibility:hidden;pointer-events:none;transition:0.25s ease;
+  }
+  .drawer-overlay.open{opacity:1;visibility:visible;pointer-events:auto;}
+  .drawer{
+    position:absolute;top:0;right:0;height:100%;width:min(430px,100%);
+    background:var(--surface);border-left:1px solid var(--border-strong);
+    transform:translateX(100%);transition:0.3s ease;display:flex;flex-direction:column;
+    box-shadow:-20px 0 60px rgba(0,0,0,0.5);
+  }
+  .drawer-overlay.open .drawer{transform:translateX(0);}
+  .drawer-header{
+    padding:20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;
+  }
+  .drawer-header h2{font-size:19px;}
+  .drawer-close{width:36px;height:36px;border:none;border-radius:50%;background:var(--surface-light);color:white;font-size:18px;}
+  .drawer-items{flex:1;overflow-y:auto;padding:14px 20px;}
+  .drawer-empty{text-align:center;padding:60px 20px;color:var(--muted);}
+  .drawer-empty .icon{font-size:48px;margin-bottom:12px;}
+  .line-item{
+    display:grid;grid-template-columns:60px 1fr auto;gap:12px;align-items:center;
+    padding:12px 0;border-bottom:1px solid var(--border);
+  }
+  .line-item-image{
+    width:60px;height:60px;border-radius:10px;background:var(--obsidian);overflow:hidden;
+    display:grid;place-items:center;font-size:24px;
+  }
+  .line-item-image img{width:100%;height:100%;object-fit:cover;}
+  .line-item-name{font-size:13px;font-weight:800;margin-bottom:4px;line-height:1.3;}
+  .line-item-price{color:var(--crimson-bright);font-size:12px;font-weight:700;margin-bottom:8px;}
+  .qty-row{display:flex;align-items:center;gap:8px;}
+  .qty-btn{
+    width:24px;height:24px;border:1px solid var(--border);border-radius:6px;background:var(--obsidian);
+    color:white;font-weight:900;font-size:13px;line-height:1;
+  }
+  .qty-value{font-size:13px;font-weight:800;min-width:16px;text-align:center;}
+  .line-remove{
+    border:none;background:transparent;color:#ff6b6b;font-size:11px;font-weight:800;padding:0;margin-left:6px;
+  }
+  .wishlist-line-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;}
+  .wishlist-line-actions button,.wishlist-line-actions a{
+    border:none;border-radius:8px;padding:6px 9px;font-size:10.5px;font-weight:800;
+  }
+  .wl-add-btn{background:var(--crimson);color:white;}
+  .wl-remove-btn{background:var(--surface-light);color:#ff8787;}
+  .wl-ask-btn{background:rgba(31,158,86,0.15);color:#5fe0a0;}
+  .drawer-footer{border-top:1px solid var(--border);padding:18px 20px;}
+  .drawer-total{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-size:15px;}
+  .drawer-total strong{font-size:20px;}
+  .drawer-footer .btn{width:100%;justify-content:center;margin-bottom:8px;}
+  .clear-btn{
+    width:100%;border:none;background:var(--surface-light);color:var(--muted);padding:11px;
+    border-radius:var(--radius-sm);font-weight:700;
+  }
+
+  /* ============================================================
+     TOAST
+  ============================================================ */
+  .toast{
+    position:fixed;left:50%;bottom:26px;transform:translate(-50%,30px);z-index:4000;
+    background:var(--surface-light);border:1px solid var(--border-strong);color:white;
+    padding:12px 18px;border-radius:999px;font-size:13px;font-weight:700;
+    opacity:0;pointer-events:none;transition:0.25s ease;box-shadow:var(--shadow-soft);
+    max-width:90vw;text-align:center;
+  }
+  .toast.show{opacity:1;transform:translate(-50%,0);}
+
+  /* ============================================================
+     FOOTER
+  ============================================================ */
+  footer{border-top:1px solid var(--border);margin-top:70px;background:var(--obsidian);}
+  .footer-inner{
+    max-width:1280px;margin:auto;padding:36px 20px;display:flex;justify-content:space-between;
+    gap:24px;flex-wrap:wrap;
+  }
+  .footer-brand p{color:var(--muted);font-size:13px;line-height:1.6;max-width:380px;margin-top:8px;}
+  .footer-links{display:flex;gap:16px;flex-wrap:wrap;align-items:center;}
+  .footer-links a{color:var(--muted);font-size:13px;font-weight:700;}
+  .footer-links a:hover{color:var(--white);}
+  .footer-bottom{border-top:1px solid var(--border);padding:16px 20px;text-align:center;color:var(--muted);font-size:12px;}
+
+  /* ============================================================
+     RESPONSIVE
+  ============================================================ */
+  @media (max-width:1080px){
+    .products-grid{grid-template-columns:repeat(3,1fr);}
+    .category-grid{grid-template-columns:repeat(3,1fr);}
+    .why-grid{grid-template-columns:repeat(2,1fr);}
+    .modal-body{grid-template-columns:1fr;}
+  }
+  @media (max-width:760px){
+    .header-inner{flex-wrap:wrap;}
+    .brand-tagline{display:none;}
+    .search-wrap{order:3;flex-basis:100%;max-width:none;}
+    .products-grid{grid-template-columns:repeat(2,1fr);}
+    .category-grid{grid-template-columns:repeat(2,1fr);}
+    .why-grid{grid-template-columns:1fr;}
+    .hero{padding:56px 18px 50px;}
+    .hero h1{letter-spacing:-1.3px;}
+    .promo-banner,.newsletter{flex-direction:column;align-items:flex-start;}
+    .newsletter-form{width:100%;}
+    .newsletter-form input{width:100%;}
+    .newsletter-form button{width:100%;}
+    main{padding-top:44px;}
+    .modal-body{padding:8px 18px 24px;}
+    .contact-grid{grid-template-columns:1fr;}
+  }
+  @media (max-width:480px){
+    .products-grid{grid-template-columns:1fr;}
+    .category-grid{grid-template-columns:1fr 1fr;}
+    .header-actions{gap:6px;}
+    .icon-btn{width:40px;height:40px;font-size:16px;}
+    .product-toolbar{flex-direction:column;align-items:flex-start;}
+    .drawer{width:100%;}
+  }
+</style>
+</head>
+<body>
+
+<div class="atmosphere"></div>
+
+<header>
+  <div class="header-inner">
+    <a href="#" class="brand" id="brandHome">
+      <span class="brand-mark">MH</span>
+      <span>
+        <span class="brand-text">MIXH <span class="accent">HUNTS</span></span>
+        <span class="brand-tagline">Find It. Love It. Get It.</span>
+      </span>
+    </a>
+
+    <div class="search-wrap">
+      <input id="searchInput" type="search" placeholder="Search phones, laptops, gadgets..." autocomplete="off" />
+      <span class="search-icon" aria-hidden="true">⌕</span>
+    </div>
+
+    <div class="header-actions">
+      <button class="icon-btn" id="wishlistBtn" aria-label="Open wishlist" title="Wishlist">
+        ♡
+        <span class="icon-badge hidden" id="wishlistCount">0</span>
+      </button>
+      <button class="icon-btn" id="cartBtn" aria-label="Open cart" title="Cart">
+        ⛃
+        <span class="icon-badge hidden" id="cartCount">0</span>
+      </button>
+      <a class="icon-btn whatsapp-header-btn" href="https://wa.me/2347074144068" target="_blank" rel="noopener" aria-label="Chat on WhatsApp" title="WhatsApp">
+        ✆
+      </a>
+    </div>
+  </div>
+
+  <div class="category-nav-row">
+    <nav class="category-nav" id="categoryNav"></nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-streak"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow"><span class="dot"></span> Operating quietly. Delivering precisely.</div>
+    <h1 id="heroTitle"></h1>
+    <p>Phones, laptops, gadgets and more &mdash; sourced with precision. Browse the collection, build your cart, and speak directly with Mixh Hunts.</p>
+    <div class="hero-buttons">
+      <button class="btn btn-primary" id="heroShopBtn">Enter the Collection</button>
+      <a class="btn btn-ghost" href="https://wa.me/2347074144068?text=Hello%20Mixh%20Hunts%2C%20I%20want%20to%20make%20an%20enquiry." target="_blank" rel="noopener">Talk with Owner</a>
+    </div>
+  </div>
+</section>
+
+<main>
+
+  <section id="categorySection">
+    <div class="section-label">THE ARCHIVE</div>
+    <div class="section-heading">
+      <div><h2>What are you hunting for?</h2><p>Every category updates the collection below in real time.</p></div>
+    </div>
+    <div class="category-grid" id="categoryGrid"></div>
+  </section>
+
+  <section class="promo-banner">
+    <div><h2>Can't find what you want?</h2><p>Tell Mixh Hunts what you're looking for and it will be hunted down.</p></div>
+    <a class="btn btn-primary" href="https://wa.me/2347074144068?text=Hello%20Mixh%20Hunts%2C%20I%27m%20looking%20for%20a%20product." target="_blank" rel="noopener">Request a Hunt</a>
+  </section>
+
+  <section id="featuredSection" style="display:none;">
+    <div class="section-label">FEATURED INVENTORY</div>
+    <div class="section-heading"><div><h2>Featured Hunts</h2><p>Hand-picked from the current collection.</p></div></div>
+    <div class="products-grid" id="featuredGrid"></div>
+  </section>
+
+  <section id="productsSection" style="margin-top:64px;">
+    <div class="section-label">THE COLLECTION</div>
+    <div class="section-heading"><div><h2 id="collectionHeading">Full Collection</h2><p id="collectionSubheading">Browse everything currently available.</p></div></div>
+
+    <div class="product-toolbar">
+      <div class="result-count" id="resultCount">Loading products...</div>
+      <select id="sortSelect" class="sort-select">
+        <option value="featured">Featured first</option>
+        <option value="low">Price: Low to high</option>
+        <option value="high">Price: High to low</option>
+        <option value="name">Name: A-Z</option>
+      </select>
+    </div>
+
+    <div class="products-grid" id="productsGrid">
+      <div class="loading-state"><div class="spinner"></div><h3>Loading the latest hunts...</h3><p>Give Mixh Hunts a moment to check the archive.</p></div>
+    </div>
+  </section>
+
+  <section class="why-grid">
+    <div class="why-card"><div class="why-icon">◈</div><h3>Precisely Sourced</h3><p>Every listing is checked before it reaches the collection.</p></div>
+    <div class="why-card"><div class="why-icon">✆</div><h3>Direct Contact</h3><p>Speak to the owner directly on WhatsApp &mdash; no bots, no scripts.</p></div>
+    <div class="why-card"><div class="why-icon">⛃</div><h3>Build Your Cart</h3><p>Add multiple items, adjust quantities, and send one clean order.</p></div>
+    <div class="why-card"><div class="why-icon">◎</div><h3>Request a Hunt</h3><p>Can't find it? Ask, and Mixh Hunts will go looking.</p></div>
+  </section>
+
+  <section class="newsletter">
+    <div class="newsletter-content">
+      <h2>Stay Ahead of the Hunt</h2>
+      <p>Get notified about new arrivals and hot deals. No spam &mdash; just the essentials.</p>
+      <form class="newsletter-form" id="newsletterForm">
+        <input id="subscriberEmail" type="email" placeholder="Enter your email address" autocomplete="email" required />
+        <button id="subscribeButton" type="submit">Subscribe</button>
+      </form>
+      <div class="newsletter-message" id="newsletterMessage" aria-live="polite"></div>
+    </div>
+  </section>
+  <section class="contact-section">
+    <div class="contact-inner">
+      <div class="section-label">GET IN TOUCH</div>
+      <div class="section-heading"><div><h2>Speak With Mixh Hunts Directly</h2></div></div>
+      <p>Prefer email? Reach the owner directly and expect a personal reply &mdash; no bots, no queues.</p>
+      <div class="contact-grid">
+        <div class="contact-card">
+          <div class="contact-icon wa">&#9742;</div>
+          <h3>WhatsApp</h3>
+          <p>Fastest way to ask about a product, pricing, or an order.</p>
+          <a class="contact-link wa-link" href="https://wa.me/2347074144068" target="_blank" rel="noopener">+234 707 414 4068</a>
+        </div>
+        <div class="contact-card">
+          <div class="contact-icon mail">&#9993;</div>
+          <h3>Email</h3>
+          <p>For detailed enquiries, business, or partnership requests.</p>
+          <a class="contact-link mail-link" href="mailto:ezentamichael405@gmail.com?subject=Mixh%20Hunts%20Enquiry">ezentamichael405@gmail.com</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- PRODUCT DETAIL MODAL -->
+<div class="modal-overlay" id="productModalOverlay">
+  <div class="product-modal" id="productModal" role="dialog" aria-modal="true">
+    <div class="modal-top"><button class="modal-close" id="modalCloseBtn" aria-label="Close">×</button></div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<!-- CART DRAWER -->
+<div class="drawer-overlay" id="cartOverlay">
+  <aside class="drawer" aria-label="Cart">
+    <div class="drawer-header"><h2>Your Cart</h2><button class="drawer-close" id="cartCloseBtn">×</button></div>
+    <div class="drawer-items" id="cartItems"></div>
+    <div class="drawer-footer">
+      <div class="drawer-total"><span>Total</span><strong id="cartTotal">₦0</strong></div>
+      <button class="btn btn-whatsapp" id="checkoutBtn">Continue on WhatsApp</button>
+      <button class="clear-btn" id="clearCartBtn">Clear Cart</button>
+    </div>
+  </aside>
+</div>
+
+<!-- WISHLIST DRAWER -->
+<div class="drawer-overlay" id="wishlistOverlay">
+  <aside class="drawer" aria-label="Wishlist">
+    <div class="drawer-header"><h2>Your Wishlist</h2><button class="drawer-close" id="wishlistCloseBtn">×</button></div>
+    <div class="drawer-items" id="wishlistItems"></div>
+  </aside>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="brand-text">MIXH <span class="accent">HUNTS</span></span>
+      <p>A premium technology marketplace operating from the shadows. Phones, laptops, gadgets, audio, wearables and more.</p>
+    </div>
+    <div class="footer-links">
+      <a href="#productsSection" id="footerShopLink">Shop</a>
+      <a href="https://wa.me/2347074144068" target="_blank" rel="noopener">WhatsApp</a>
+      <a href="mailto:ezentamichael405@gmail.com?subject=Mixh%20Hunts%20Enquiry">ezentamichael405@gmail.com</a>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2026 Mixh Hunts. Find It. Love It. Get It.</div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+"use strict";
+
+/* ============================================================
+   CONFIG
+============================================================ */
+const SUPABASE_URL = "https://tbortgatnpcyyhwmdrpb.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_QY5fi2tSy1z4F_DeHLrEFA_r2MtoIqr";
+const WHATSAPP_NUMBER = "2347074144068";
+const PRODUCT_IMAGES_BUCKET = "product-images";
+const CART_STORAGE_KEY = "mixh_hunts_cart";
+const WISHLIST_STORAGE_KEY = "mixh_hunts_wishlist";
+
+let supabaseClient = null;
+try {
+  if (window.supabase && typeof window.supabase.createClient === "function") {
+    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+  }
+} catch (err) {
+  console.error("Supabase initialization failed:", err);
+}
+
+/* ============================================================
+   STATE
+============================================================ */
+let CATEGORIES = [];
+let PRODUCTS = [];
+let currentCategoryId = "all";
+let currentSearch = "";
+let cart = [];
+let wishlist = [];
+let productsLoading = true;
+let activeModalProductId = null;
+let activeGalleryIndex = 0;
+
+/* ============================================================
+   DOM / GENERIC HELPERS
+============================================================ */
+function $(id){ return document.getElementById(id); }
+
+function safeText(value, fallback){
+  if (fallback === undefined) fallback = "";
+  if (value === null || value === undefined) return fallback;
+  return String(value);
+}
+
+function escapeHtml(value){
+  return safeText(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+function formatPrice(price){
+  const n = Number(price);
+  if (!Number.isFinite(n) || n <= 0) return "Contact for price";
+  return "\u20A6" + n.toLocaleString("en-NG");
+}
+
+function storagePublicUrl(path){
+  const p = safeText(path).trim();
+  if (!p) return "";
+  if (p.startsWith("http://") || p.startsWith("https://") || p.startsWith("data:")) return p;
+  return SUPABASE_URL + "/storage/v1/object/public/" + PRODUCT_IMAGES_BUCKET + "/" + p.replace(/^\/+/, "");
+}
+
+function getProductById(id){
+  const key = String(id);
+  return PRODUCTS.find(function(p){ return String(p.id) === key; }) || null;
+}
+
+function getCategoryById(id){
+  const key = String(id);
+  return CATEGORIES.find(function(c){ return String(c.id) === key; }) || null;
+}
+
+function getStockQuantity(product){
+  const v = Number(product.stock_quantity);
+  if (!Number.isFinite(v)) return null;
+  return Math.max(0, Math.floor(v));
+}
+
+function isOutOfStock(product){
+  const availability = safeText(product.availability).toLowerCase();
+  if (availability.indexOf("out") !== -1) return true;
+
+  const stock = getStockQuantity(product);
+  const flexible = availability.indexOf("request") !== -1 ||
+                    availability.indexOf("pre-order") !== -1 ||
+                    availability.indexOf("preorder") !== -1 ||
+                    availability.indexOf("coming") !== -1;
+
+  if (stock !== null && stock <= 0 && !flexible) return true;
+  return false;
+}
+
+function canAddToCart(product){
+  if (!product) return false;
+  if (!product.is_active) return false;
+  return !isOutOfStock(product);
+}
+
+function getMaxQuantity(product){
+  const stock = getStockQuantity(product);
+  return stock === null ? Infinity : stock;
+}
+
+function hasValidPrice(product){
+  const price = Number(product.price);
+  return Number.isFinite(price) && price > 0;
+}
+
+/* ============================================================
+   HERO TITLE (letters/words/spaces kept separate so spacing
+   can never collapse, per requirement)
+============================================================ */
+function buildHeroTitle(){
+  const title = "Hunt for Your Device";
+  const words = title.split(" ");
+
+  const html = words.map(function(word, wordIndex){
+    const isLastWord = wordIndex === words.length - 1;
+
+    const letters = word.split("").map(function(letter, letterIndex){
+      const delay = (wordIndex * 0.3 + letterIndex * 0.045).toFixed(3);
+      const cls = isLastWord ? "hero-letter accent" : "hero-letter";
+      return '<span class="' + cls + '" style="animation-delay:' + delay + 's">' + escapeHtml(letter) + '</span>';
+    }).join("");
+
+    return '<span class="hero-word">' + letters + '</span>';
+  }).join('<span class="hero-space" aria-hidden="true">&nbsp;</span>');
+
+  const el = $("heroTitle");
+  if (el) el.innerHTML = html;
+}
+
+/* ============================================================
+   CART STORAGE
+============================================================ */
+function loadCartFromStorage(){
+  try {
+    const saved = localStorage.getItem(CART_STORAGE_KEY);
+    if (!saved) return [];
+    const parsed = JSON.parse(saved);
+    if (!Array.isArray(parsed)) return [];
+
+    return parsed
+      .filter(function(item){
+        if (!item) return false;
+        const id = item.id !== undefined ? item.id : item.productId;
+        const qty = Number(item.quantity);
+        return id !== undefined && id !== null && String(id).trim() !== "" && Number.isFinite(qty) && qty > 0;
+      })
+      .map(function(item){
+        const id = item.id !== undefined ? item.id : item.productId;
+        return { id: String(id), quantity: Math.max(1, Math.floor(Number(item.quantity))) };
+      });
+  } catch (err) {
+    console.warn("Could not load cart:", err);
+    return [];
+  }
+}
+
+function saveCartToStorage(){
+  try {
+    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+  } catch (err) {
+    console.warn("Could not save cart:", err);
+  }
+}
+
+function normalizeCart(){
+  if (!Array.isArray(cart)) cart = [];
+
+  let changed = false;
+  const merged = new Map();
+
+  for (let i = 0; i < cart.length; i++) {
+    const item = cart[i];
+    if (!item) { changed = true; continue; }
+
+    const productId = item.id !== undefined ? String(item.id) : "";
+    const product = getProductById(productId);
+
+    if (!product || !canAddToCart(product)) { changed = true; continue; }
+
+    let quantity = Math.floor(Number(item.quantity) || 1);
+    if (quantity < 1) { quantity = 1; changed = true; }
+
+    const max = getMaxQuantity(product);
+    if (Number.isFinite(max) && quantity > max) { quantity = max; changed = true; }
+    if (quantity <= 0) { changed = true; continue; }
+
+    if (merged.has(productId)) {
+      let total = merged.get(productId) + quantity;
+      if (Number.isFinite(max)) total = Math.min(total, max);
+      merged.set(productId, total);
+      changed = true;
+    } else {
+      merged.set(productId, quantity);
+    }
+  }
+
+  cart = Array.from(merged.entries()).map(function(entry){
+    return { id: entry[0], quantity: entry[1] };
+  });
+
+  if (changed) saveCartToStorage();
+}
+
+/* ============================================================
+   WISHLIST STORAGE
+============================================================ */
+function loadWishlistFromStorage(){
+  try {
+    const saved = localStorage.getItem(WISHLIST_STORAGE_KEY);
+    const parsed = saved ? JSON.parse(saved) : [];
+    const list = Array.isArray(parsed) ? parsed.map(String) : [];
+    return Array.from(new Set(list));
+  } catch (err) {
+    console.warn("Could not load wishlist:", err);
+    return [];
+  }
+}
+
+function saveWishlistToStorage(){
+  try {
+    localStorage.setItem(WISHLIST_STORAGE_KEY, JSON.stringify(wishlist));
+  } catch (err) {
+    console.warn("Could not save wishlist:", err);
+  }
+}
+
+function isWishlisted(productId){
+  return wishlist.indexOf(String(productId)) !== -1;
+}
+
+function pruneWishlist(){
+  const before = wishlist.length;
+  wishlist = wishlist.filter(function(id){ return !!getProductById(id); });
+  if (wishlist.length !== before) saveWishlistToStorage();
+}
+
+/* ============================================================
+   CATEGORY NAV + GRID
+============================================================ */
+function renderCategoryNav(){
+  const nav = $("categoryNav");
+  if (!nav) return;
+
+  let html = '<button class="category-pill' + (currentCategoryId === "all" ? " active" : "") +
+    '" data-category-id="all">All Products</button>';
+
+  CATEGORIES.forEach(function(category){
+    const id = safeText(category.id);
+    const active = String(currentCategoryId) === id ? " active" : "";
+    html += '<button class="category-pill' + active + '" data-category-id="' + escapeHtml(id) + '">' +
+      escapeHtml(category.icon || "\u25C8") + ' ' + escapeHtml(category.name) + '</button>';
+  });
+
+  html += '<a class="category-pill" href="https://wa.me/' + WHATSAPP_NUMBER +
+    '?text=Hello%20Mixh%20Hunts%2C%20I%20need%20help." target="_blank" rel="noopener">Need Help</a>';
+
+  nav.innerHTML = html;
+}
+
+function renderCategoryGrid(){
+  const grid = $("categoryGrid");
+  if (!grid) return;
+
+  if (!CATEGORIES.length) {
+    grid.innerHTML = '<div class="empty-state"><div class="icon">\u25C8</div><h3>No categories yet</h3>' +
+      '<p>Categories will appear here once they are added to Mixh Hunts.</p></div>';
+    return;
+  }
+
+  grid.innerHTML = CATEGORIES.map(function(category){
+    const id = safeText(category.id);
+    const count = PRODUCTS.filter(function(p){ return String(p.category_id) === id; }).length;
+    return '<div class="category-card" data-category-id="' + escapeHtml(id) + '">' +
+      '<div class="cat-icon">' + escapeHtml(category.icon || "\u25C8") + '</div>' +
+      '<strong>' + escapeHtml(category.name) + '</strong>' +
+      '<small>' + count + ' product' + (count === 1 ? "" : "s") + '</small></div>';
+  }).join("");
+}
+
+/* ============================================================
+   SPECIFICATIONS (arbitrary JSONB - never assume fixed keys)
+============================================================ */
+function parseSpecifications(raw){
+  if (!raw) return {};
+  if (typeof raw === "object" && !Array.isArray(raw)) return raw;
+  if (typeof raw === "string") {
+    try {
+      const parsed = JSON.parse(raw);
+      return (parsed && typeof parsed === "object" && !Array.isArray(parsed)) ? parsed : {};
+    } catch (err) {
+      return {};
+    }
+  }
+  return {};
+}
+
+function renderSpecifications(specifications){
+  const entries = Object.entries(specifications || {}).filter(function(entry){
+    return entry[1] !== null && entry[1] !== undefined && entry[1] !== "";
+  });
+
+  if (!entries.length) return "";
+
+  const rows = entries.map(function(entry){
+    const key = entry[0];
+    let value = entry[1];
+    if (typeof value === "object") {
+      try { value = JSON.stringify(value); } catch (err) { value = String(value); }
+    }
+    return '<div class="spec-row"><span class="spec-key">' + escapeHtml(key) +
+      '</span><span class="spec-value">' + escapeHtml(value) + '</span></div>';
+  }).join("");
+
+  return '<div class="spec-block"><h4>Specifications</h4><div class="spec-grid">' + rows + '</div></div>';
+}
+
+/* ============================================================
+   PRODUCT IMAGES
+============================================================ */
+function getSortedImages(product){
+  const images = Array.isArray(product.images) ? product.images.slice() : [];
+  images.sort(function(a, b){ return Number(a.sort_order || 0) - Number(b.sort_order || 0); });
+  return images;
+}
+
+function getPrimaryImageUrl(product){
+  const images = getSortedImages(product);
+  if (!images.length) return "";
+  const primary = images.find(function(img){ return img.is_primary === true; });
+  return storagePublicUrl((primary || images[0]).image_url);
+}
+
+/* ============================================================
+   SEARCH + FILTER + SORT
+============================================================ */
+function specSearchText(specifications){
+  try {
+    return Object.entries(specifications || {}).map(function(entry){
+      return entry[0] + " " + entry[1];
+    }).join(" ");
+  } catch (err) {
+    return "";
+  }
+}
+
+function getFilteredProducts(){
+  const search = currentSearch.trim().toLowerCase();
+
+  let list = PRODUCTS.filter(function(product){
+    if (currentCategoryId !== "all" && String(product.category_id) !== String(currentCategoryId)) return false;
+    if (!search) return true;
+
+    const category = getCategoryById(product.category_id);
+
+    const haystack = [
+      product.name, product.brand, product.model, product.variant,
+      product.description, category ? category.name : "",
+      specSearchText(product.specifications)
+    ].filter(Boolean).join(" ").toLowerCase();
+
+    return haystack.indexOf(search) !== -1;
+  });
+
+  return sortProducts(list);
+}
+
+function sortProducts(list){
+  const select = $("sortSelect");
+  const mode = select ? select.value : "featured";
+  const copy = list.slice();
+
+  if (mode === "low") return copy.sort(function(a,b){ return (Number(a.price)||0) - (Number(b.price)||0); });
+  if (mode === "high") return copy.sort(function(a,b){ return (Number(b.price)||0) - (Number(a.price)||0); });
+  if (mode === "name") return copy.sort(function(a,b){ return safeText(a.name).localeCompare(safeText(b.name)); });
+
+  return copy.sort(function(a,b){ return Number(!!b.featured) - Number(!!a.featured); });
+}
+
+/* ============================================================
+   PRODUCT CARD RENDERING
+============================================================ */
+function productCardHtml(product){
+  const image = getPrimaryImageUrl(product);
+  const category = getCategoryById(product.category_id);
+  const disabled = !canAddToCart(product);
+  const out = isOutOfStock(product);
+  const wished = isWishlisted(product.id);
+
+  const imageBlock = image
+    ? '<img src="' + escapeHtml(image) + '" alt="' + escapeHtml(product.name) + '" loading="lazy" ' +
+      'onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'grid\';" />' +
+      '<div class="product-placeholder" style="display:none;">\u25C8</div>'
+    : '<div class="product-placeholder">\u25C8</div>';
+
+  const variantText = [product.variant, product.model].filter(Boolean).join(" \u00B7 ");
+
+  return '<article class="product-card" data-product-id="' + escapeHtml(product.id) + '">' +
+    '<div class="product-image">' +
+      '<button type="button" class="wishlist-heart' + (wished ? " active" : "") +
+        '" data-wishlist-toggle="' + escapeHtml(product.id) + '" aria-label="Toggle wishlist">' +
+        (wished ? "\u2665" : "\u2661") + '</button>' +
+      (product.badge ? '<span class="card-badge">' + escapeHtml(product.badge) + '</span>' : "") +
+      '<span class="stock-chip' + (out ? " out" : "") + '">' + escapeHtml(out ? "Unavailable" : safeText(product.availability, "In Stock")) + '</span>' +
+      imageBlock +
+    '</div>' +
+    '<div class="product-info">' +
+      '<div class="product-brand">' + escapeHtml(product.brand || (category ? category.name : "Mixh Hunts")) + '</div>' +
+      '<div class="product-name">' + escapeHtml(product.name) + '</div>' +
+      (variantText ? '<div class="product-variant">' + escapeHtml(variantText) + '</div>' : "") +
+      '<div class="product-bottom">' +
+        '<div class="price' + (hasValidPrice(product) ? "" : " contact") + '">' + formatPrice(product.price) + '</div>' +
+      '</div>' +
+      '<button type="button" class="add-cart-btn" data-add-to-cart="' + escapeHtml(product.id) + '" ' +
+        (disabled ? "disabled" : "") + '>' + (out ? "Unavailable" : "Add to Cart") + '</button>' +
+    '</div>' +
+  '</article>';
+}
+
+function renderProductsGrid(){
+  const grid = $("productsGrid");
+  const resultCount = $("resultCount");
+  if (!grid) return;
+
+  if (productsLoading) {
+    grid.innerHTML = '<div class="loading-state"><div class="spinner"></div><h3>Loading the latest hunts...</h3>' +
+      '<p>Give Mixh Hunts a moment to check the archive.</p></div>';
+    if (resultCount) resultCount.textContent = "Loading products...";
+    return;
+  }
+
+  const products = getFilteredProducts();
+
+  if (resultCount) {
+    resultCount.textContent = products.length + " product" + (products.length === 1 ? "" : "s");
+  }
+
+  if (!products.length) {
+    const hasAny = PRODUCTS.length > 0;
+    grid.innerHTML = '<div class="empty-state"><div class="icon">' + (hasAny ? "\u2315" : "\u25C8") + '</div>' +
+      '<h3>' + (hasAny ? "No hunts found" : "No products have been added yet") + '</h3>' +
+      '<p>' + (hasAny ? "Try another search or browse all categories." : "Products added from the Mixh Hunts admin panel will appear here.") + '</p>' +
+      (hasAny ? '<button type="button" id="resetFiltersBtn">Show Everything</button>' : "") +
+      '</div>';
+    return;
+  }
+
+  grid.innerHTML = products.map(productCardHtml).join("");
+}
+
+function renderFeaturedSection(){
+  const section = $("featuredSection");
+  const grid = $("featuredGrid");
+  if (!section || !grid) return;
+
+  const featured = PRODUCTS.filter(function(p){ return p.featured === true; });
+
+  if (!featured.length) {
+    section.style.display = "none";
+    grid.innerHTML = "";
+    return;
+  }
+
+  section.style.display = "";
+  grid.innerHTML = featured.slice(0, 8).map(productCardHtml).join("");
+}
+
+/* ============================================================
+   PRODUCT DETAIL MODAL
+============================================================ */
+function openProductModal(productId){
+  const product = getProductById(productId);
+  if (!product) {
+    showToast("This product could not be found.");
+    return;
+  }
+
+  activeModalProductId = String(productId);
+  activeGalleryIndex = 0;
+
+  renderModalBody(product);
+
+  const overlay = $("productModalOverlay");
+  if (overlay) overlay.classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+
+function closeProductModal(){
+  const overlay = $("productModalOverlay");
+  if (overlay) overlay.classList.remove("open");
+  document.body.style.overflow = "";
+  activeModalProductId = null;
+}
+
+function renderModalBody(product){
+  const body = $("modalBody");
+  if (!body) return;
+
+  const images = getSortedImages(product);
+  const urls = images.map(function(img){ return storagePublicUrl(img.image_url); }).filter(Boolean);
+  const category = getCategoryById(product.category_id);
+  const wished = isWishlisted(product.id);
+  const disabled = !canAddToCart(product);
+
+  const mainImage = urls[activeGalleryIndex] || urls[0] || "";
+
+  const galleryHtml =
+    '<div>' +
+      '<div class="gallery-main">' +
+        (mainImage
+          ? '<img src="' + escapeHtml(mainImage) + '" alt="' + escapeHtml(product.name) + '" id="modalMainImage" />'
+          : '<div class="product-placeholder" style="font-size:70px;">\u25C8</div>') +
+      '</div>' +
+      (urls.length > 1
+        ? '<div class="gallery-thumbs">' + urls.map(function(url, index){
+            return '<button type="button" class="gallery-thumb' + (index === activeGalleryIndex ? " active" : "") +
+              '" data-gallery-index="' + index + '"><img src="' + escapeHtml(url) + '" alt="" /></button>';
+          }).join("") + '</div>'
+        : "") +
+    '</div>';
+
+  const metaChips = [product.condition, product.availability, category ? category.name : ""]
+    .filter(Boolean)
+    .map(function(item){ return '<span class="meta-chip">' + escapeHtml(item) + '</span>'; })
+    .join("");
+
+  const specsHtml = renderSpecifications(product.specifications);
+
+  const whatsappMsg = encodeURIComponent("Hello Mixh Hunts, I'm interested in " + safeText(product.name) + ".");
+
+  const detailsHtml =
+    '<div class="modal-details">' +
+      '<h3 class="brand">' + escapeHtml(product.brand || (category ? category.name : "Mixh Hunts")) + '</h3>' +
+      '<h2>' + escapeHtml(product.name) + '</h2>' +
+      '<div class="modal-price' + (hasValidPrice(product) ? "" : " contact") + '">' + formatPrice(product.price) + '</div>' +
+      (metaChips ? '<div class="modal-meta-row">' + metaChips + '</div>' : "") +
+      '<p class="modal-description">' + escapeHtml(product.description || "Ask Mixh Hunts for more details about this product.") + '</p>' +
+      specsHtml +
+      '<div class="modal-actions">' +
+        '<button type="button" class="modal-heart' + (wished ? " active" : "") + '" data-wishlist-toggle="' + escapeHtml(product.id) + '" aria-label="Toggle wishlist">' +
+          (wished ? "\u2665" : "\u2661") + '</button>' +
+        '<button type="button" class="btn btn-primary" data-add-to-cart="' + escapeHtml(product.id) + '" ' + (disabled ? "disabled" : "") + '>' +
+          (isOutOfStock(product) ? "Unavailable" : "Add to Cart") + '</button>' +
+        '<a class="btn btn-whatsapp" href="https://wa.me/' + WHATSAPP_NUMBER + '?text=' + whatsappMsg + '" target="_blank" rel="noopener">WhatsApp</a>' +
+      '</div>' +
+    '</div>';
+
+  body.innerHTML = galleryHtml + detailsHtml;
+}
+
+/* ============================================================
+   CART OPERATIONS
+============================================================ */
+function addToCart(productId){
+  const product = getProductById(productId);
+  if (!product) { showToast("This product could not be found."); return; }
+  if (!canAddToCart(product)) { showToast("This product is not currently available."); return; }
+
+  normalizeCart();
+
+  const id = String(productId);
+  const existing = cart.find(function(item){ return item.id === id; });
+  const max = getMaxQuantity(product);
+
+  if (existing) {
+    if (Number.isFinite(max) && existing.quantity >= max) {
+      showToast("Only " + max + " available.");
+      return;
+    }
+    existing.quantity += 1;
+  } else {
+    cart.push({ id: id, quantity: 1 });
+  }
+
+  saveCartToStorage();
+  renderCartDrawer();
+  updateCartBadge();
+  showToast(product.name + " added to cart");
+}
+
+function changeCartQuantity(productId, delta){
+  normalizeCart();
+
+  const id = String(productId);
+  const item = cart.find(function(c){ return c.id === id; });
+  const product = getProductById(id);
+
+  if (!item || !product) { renderCartDrawer(); updateCartBadge(); return; }
+
+  const newQty = item.quantity + delta;
+
+  if (newQty <= 0) { removeFromCart(id); return; }
+
+  const max = getMaxQuantity(product);
+  if (Number.isFinite(max) && newQty > max) { showToast("Only " + max + " available."); return; }
+
+  item.quantity = newQty;
+  saveCartToStorage();
+  renderCartDrawer();
+  updateCartBadge();
+}
+
+function removeFromCart(productId){
+  const id = String(productId);
+  const before = cart.length;
+  cart = cart.filter(function(item){ return item.id !== id; });
+  if (cart.length !== before) {
+    saveCartToStorage();
+    renderCartDrawer();
+    updateCartBadge();
+    showToast("Item removed from cart.");
+  }
+}
+
+function clearCart(){
+  if (!cart.length) { showToast("Your cart is already empty."); return; }
+  cart = [];
+  saveCartToStorage();
+  renderCartDrawer();
+  updateCartBadge();
+  showToast("Cart cleared.");
+}
+
+function getCartTotal(){
+  return cart.reduce(function(total, item){
+    const product = getProductById(item.id);
+    if (!product || !hasValidPrice(product)) return total;
+    return total + Number(product.price) * item.quantity;
+  }, 0);
+}
+
+function updateCartBadge(){
+  const badge = $("cartCount");
+  if (!badge) return;
+  normalizeCart();
+  const total = cart.reduce(function(sum, item){ return sum + Number(item.quantity || 0); }, 0);
+  badge.textContent = total > 99 ? "99+" : String(total);
+  badge.classList.toggle("hidden", total === 0);
+}
+
+function renderCartDrawer(){
+  const container = $("cartItems");
+  const totalEl = $("cartTotal");
+  if (!container) return;
+
+  normalizeCart();
+
+  if (!cart.length) {
+    container.innerHTML = '<div class="drawer-empty"><div class="icon">\u26C3</div><h3>Your cart is empty</h3>' +
+      '<p>Add products and they will appear here.</p></div>';
+  } else {
+    container.innerHTML = cart.map(function(item){
+      const product = getProductById(item.id);
+      if (!product) return "";
+      const image = getPrimaryImageUrl(product);
+
+      return '<div class="line-item">' +
+        '<div class="line-item-image">' + (image ? '<img src="' + escapeHtml(image) + '" alt="' + escapeHtml(product.name) + '" />' : "\u25C8") + '</div>' +
+        '<div>' +
+          '<div class="line-item-name">' + escapeHtml(product.name) + '</div>' +
+          '<div class="line-item-price">' + formatPrice(product.price) + '</div>' +
+          '<div class="qty-row">' +
+            '<button type="button" class="qty-btn" data-qty-decrease="' + escapeHtml(product.id) + '" aria-label="Decrease quantity">\u2212</button>' +
+            '<span class="qty-value">' + item.quantity + '</span>' +
+            '<button type="button" class="qty-btn" data-qty-increase="' + escapeHtml(product.id) + '" aria-label="Increase quantity">+</button>' +
+            '<button type="button" class="line-remove" data-remove-from-cart="' + escapeHtml(product.id) + '">Remove</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }).join("");
+  }
+
+  if (totalEl) {
+    const total = getCartTotal();
+    if (total > 0) totalEl.textContent = "\u20A6" + total.toLocaleString("en-NG");
+    else if (cart.length) totalEl.textContent = "Contact for price";
+    else totalEl.textContent = "\u20A60";
+  }
+}
+
+function openCart(){
+  const overlay = $("cartOverlay");
+  if (!overlay) return;
+  normalizeCart();
+  renderCartDrawer();
+  updateCartBadge();
+  overlay.classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+
+function closeCart(){
+  const overlay = $("cartOverlay");
+  if (!overlay) return;
+  overlay.classList.remove("open");
+  if (!isAnyOverlayOpen()) document.body.style.overflow = "";
+}
+
+function checkoutWhatsApp(){
+  normalizeCart();
+  if (!cart.length) { showToast("Your cart is empty."); return; }
+
+  let message = "Hello Mixh Hunts!\n\nI'd like to enquire about these products:\n\n";
+  let knownSubtotal = 0;
+  let hasUnknownPrice = false;
+
+  cart.forEach(function(item, index){
+    const product = getProductById(item.id);
+    if (!product) return;
+
+    const price = Number(product.price);
+    const priceText = (Number.isFinite(price) && price > 0)
+      ? " - \u20A6" + price.toLocaleString("en-NG") + " each"
+      : " - Contact for price";
+
+    message += (index + 1) + ". " + safeText(product.name) + " x " + item.quantity + priceText + "\n";
+
+    if (Number.isFinite(price) && price > 0) knownSubtotal += price * item.quantity;
+    else hasUnknownPrice = true;
+
+    if (product.variant) message += "   Variant: " + safeText(product.variant) + "\n";
+  });
+
+  message += "\n";
+  if (knownSubtotal > 0) message += "Known subtotal: \u20A6" + knownSubtotal.toLocaleString("en-NG") + "\n";
+  if (hasUnknownPrice) message += "Some prices are on request.\n";
+  message += "\nPlease confirm current price and availability.\n\nThank you!";
+
+  window.open("https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(message), "_blank", "noopener");
+}
+
+/* ============================================================
+   WISHLIST OPERATIONS
+============================================================ */
+function toggleWishlist(productId){
+  const id = String(productId);
+  const product = getProductById(id);
+  if (!product) return;
+
+  if (isWishlisted(id)) {
+    wishlist = wishlist.filter(function(w){ return w !== id; });
+    showToast("Removed from wishlist.");
+  } else {
+    wishlist.push(id);
+    showToast("Added to wishlist");
+  }
+
+  saveWishlistToStorage();
+  updateWishlistBadge();
+  renderProductsGrid();
+  renderFeaturedSection();
+  renderWishlistDrawer();
+
+  if (activeModalProductId === id) renderModalBody(product);
+}
+
+function updateWishlistBadge(){
+  const badge = $("wishlistCount");
+  if (!badge) return;
+  badge.textContent = wishlist.length > 99 ? "99+" : String(wishlist.length);
+  badge.classList.toggle("hidden", wishlist.length === 0);
+}
+
+function renderWishlistDrawer(){
+  const container = $("wishlistItems");
+  if (!container) return;
+
+  pruneWishlist();
+
+  const products = wishlist.map(getProductById).filter(Boolean);
+
+  if (!products.length) {
+    container.innerHTML = '<div class="drawer-empty"><div class="icon">\u2661</div><h3>Your wishlist is empty</h3>' +
+      '<p>Tap the heart on any product to save it here.</p></div>';
+    return;
+  }
+
+  container.innerHTML = products.map(function(product){
+    const image = getPrimaryImageUrl(product);
+    const whatsappMsg = encodeURIComponent("Hello Mixh Hunts, I'm interested in " + safeText(product.name) + ". Is it still available?");
+
+    return '<div class="line-item">' +
+      '<div class="line-item-image">' + (image ? '<img src="' + escapeHtml(image) + '" alt="' + escapeHtml(product.name) + '" />' : "\u25C8") + '</div>' +
+      '<div>' +
+        '<div class="line-item-name">' + escapeHtml(product.name) + '</div>' +
+        '<div class="line-item-price">' + formatPrice(product.price) + '</div>' +
+        '<div class="wishlist-line-actions">' +
+          '<button type="button" class="wl-add-btn" data-add-to-cart="' + escapeHtml(product.id) + '">Add to Cart</button>' +
+          '<button type="button" class="wl-remove-btn" data-wishlist-toggle="' + escapeHtml(product.id) + '">Remove</button>' +
+          '<a class="wl-ask-btn" href="https://wa.me/' + WHATSAPP_NUMBER + '?text=' + whatsappMsg + '" target="_blank" rel="noopener">Ask</a>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }).join("");
+}
+
+function openWishlist(){
+  const overlay = $("wishlistOverlay");
+  if (!overlay) return;
+  renderWishlistDrawer();
+  overlay.classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+
+function closeWishlist(){
+  const overlay = $("wishlistOverlay");
+  if (!overlay) return;
+  overlay.classList.remove("open");
+  if (!isAnyOverlayOpen()) document.body.style.overflow = "";
+}
+
+function isAnyOverlayOpen(){
+  const cartOverlay = $("cartOverlay");
+  const wishlistOverlay = $("wishlistOverlay");
+  const modalOverlay = $("productModalOverlay");
+  return (cartOverlay && cartOverlay.classList.contains("open")) ||
+         (wishlistOverlay && wishlistOverlay.classList.contains("open")) ||
+         (modalOverlay && modalOverlay.classList.contains("open"));
+}
+
+/* ============================================================
+   TOAST
+============================================================ */
+let toastTimer = null;
+function showToast(message){
+  const toast = $("toast");
+  if (!toast) return;
+  toast.textContent = message;
+  toast.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ toast.classList.remove("show"); }, 2400);
+}
+
+/* ============================================================
+   CATEGORY SELECTION
+============================================================ */
+function selectCategory(categoryId){
+  currentCategoryId = safeText(categoryId, "all");
+
+  const heading = $("collectionHeading");
+  const subheading = $("collectionSubheading");
+
+  if (currentCategoryId === "all") {
+    if (heading) heading.textContent = "Full Collection";
+    if (subheading) subheading.textContent = "Browse everything currently available.";
+  } else {
+    const category = getCategoryById(currentCategoryId);
+    if (heading) heading.textContent = category ? category.name : "Collection";
+    if (subheading) subheading.textContent = "Showing products in this category.";
+  }
+
+  renderCategoryNav();
+  renderProductsGrid();
+
+  const section = $("productsSection");
+  if (section) setTimeout(function(){ section.scrollIntoView({ behavior:"smooth", block:"start" }); }, 30);
+}
+
+function resetFilters(){
+  currentCategoryId = "all";
+  currentSearch = "";
+  const input = $("searchInput");
+  if (input) input.value = "";
+  selectCategory("all");
+  showToast("Showing all products.");
+}
+
+/* ============================================================
+   DATA LOADING
+============================================================ */
+async function loadCategories(){
+  if (!supabaseClient) throw new Error("Supabase client is unavailable.");
+
+  const { data, error } = await supabaseClient
+    .from("categories")
+    .select("*")
+    .eq("is_active", true)
+    .order("sort_order", { ascending: true });
+
+  if (error) throw error;
+
+  CATEGORIES = Array.isArray(data) ? data : [];
+  renderCategoryNav();
+  renderCategoryGrid();
+}
+
+async function loadProducts(){
+  if (!supabaseClient) throw new Error("Supabase client is unavailable.");
+
+  const productsPromise = supabaseClient
+    .from("products")
+    .select("*")
+    .eq("is_active", true)
+    .order("featured", { ascending: false })
+    .order("created_at", { ascending: false });
+
+  const imagesPromise = supabaseClient
+    .from("product_images")
+    .select("*")
+    .order("sort_order", { ascending: true });
+
+  const results = await Promise.all([productsPromise, imagesPromise]);
+  const productsResult = results[0];
+  const imagesResult = results[1];
+
+  if (productsResult.error) throw productsResult.error;
+  if (imagesResult.error) throw imagesResult.error;
+
+  const rawProducts = Array.isArray(productsResult.data) ? productsResult.data : [];
+  const rawImages = Array.isArray(imagesResult.data) ? imagesResult.data : [];
+
+  const imagesByProduct = new Map();
+  rawImages.forEach(function(image){
+    const pid = safeText(image.product_id);
+    if (!pid) return;
+    if (!imagesByProduct.has(pid)) imagesByProduct.set(pid, []);
+    imagesByProduct.get(pid).push(image);
+  });
+
+  PRODUCTS = rawProducts.map(function(product){
+    const id = safeText(product.id);
+    return Object.assign({}, product, {
+      id: id,
+      name: safeText(product.name, "Unnamed Product"),
+      category_id: safeText(product.category_id),
+      brand: safeText(product.brand),
+      model: safeText(product.model),
+      variant: safeText(product.variant),
+      condition: safeText(product.condition),
+      price: Number(product.price) || 0,
+      availability: safeText(product.availability, "In Stock"),
+      badge: safeText(product.badge),
+      featured: Boolean(product.featured),
+      is_active: Boolean(product.is_active),
+      description: safeText(product.description),
+      specifications: parseSpecifications(product.specifications),
+      images: imagesByProduct.get(id) || []
+    });
+  });
+
+  productsLoading = false;
+
+  normalizeCart();
+  pruneWishlist();
+
+  renderCategoryGrid();
+  renderFeaturedSection();
+  renderProductsGrid();
+  renderCartDrawer();
+  updateCartBadge();
+  updateWishlistBadge();
+}
+
+function showDatabaseError(error){
+  console.error("Mixh Hunts database error:", error);
+  productsLoading = false;
+
+  const grid = $("productsGrid");
+  const resultCount = $("resultCount");
+  if (resultCount) resultCount.textContent = "Unable to load products";
+  if (!grid) return;
+
+  grid.innerHTML = '<div class="error-state"><div class="icon">\u26A0</div><h3>We could not load the hunts</h3>' +
+    '<p>Please check your connection and try again.</p>' +
+    '<button type="button" id="retryLoadBtn">Try Again</button></div>';
+}
+
+async function retryLoad(){
+  if (!supabaseClient) { showDatabaseError(new Error("Supabase client unavailable.")); return; }
+  productsLoading = true;
+  renderProductsGrid();
+  try {
+    await loadCategories();
+    await loadProducts();
+  } catch (err) {
+    showDatabaseError(err);
+  }
+}
+
+/* ============================================================
+   NEWSLETTER
+============================================================ */
+function setupNewsletter(){
+  const form = $("newsletterForm");
+  const emailInput = $("subscriberEmail");
+  const button = $("subscribeButton");
+  const message = $("newsletterMessage");
+  if (!form || !emailInput || !button || !message) return;
+
+  form.addEventListener("submit", async function(event){
+    event.preventDefault();
+
+    if (!supabaseClient) {
+      message.textContent = "Subscription is temporarily unavailable. Please try again later.";
+      return;
+    }
+
+    const email = emailInput.value.trim().toLowerCase();
+    if (!email) return;
+
+    button.disabled = true;
+    button.textContent = "Subscribing...";
+    message.textContent = "Adding you to the list...";
+
+    try {
+      const { error } = await supabaseClient.from("subscribers").insert({ email: email, is_active: true }).select().single();
+
+      if (error) {
+        const duplicate = error.code === "23505" || safeText(error.message).toLowerCase().indexOf("duplicate") !== -1;
+        if (duplicate) {
+          message.textContent = "You're already on the Mixh Hunts list.";
+          emailInput.value = "";
+        } else {
+          throw error;
+        }
+      } else {
+        emailInput.value = "";
+        message.textContent = "You're in. Watch out for Mixh Hunts updates.";
+        showToast("Subscribed successfully!");
+      }
+    } catch (err) {
+      console.error("Subscription failed:", err);
+      message.textContent = "We couldn't subscribe you right now. Please try again.";
+    } finally {
+      button.disabled = false;
+      button.textContent = "Subscribe";
+    }
+  });
+}
+
+/* ============================================================
+   EVENT DELEGATION (single set of listeners, no scattered
+   inline handlers scattered across markup)
+============================================================ */
+function setupEventDelegation(){
+
+  document.addEventListener("click", function(event){
+
+    const wishlistToggle = event.target.closest("[data-wishlist-toggle]");
+    if (wishlistToggle) {
+      event.preventDefault();
+      toggleWishlist(wishlistToggle.getAttribute("data-wishlist-toggle"));
+      return;
+    }
+
+    const addToCartBtn = event.target.closest("[data-add-to-cart]");
+    if (addToCartBtn && !addToCartBtn.disabled) {
+      event.preventDefault();
+      addToCart(addToCartBtn.getAttribute("data-add-to-cart"));
+      return;
+    }
+
+    const qtyIncrease = event.target.closest("[data-qty-increase]");
+    if (qtyIncrease) {
+      changeCartQuantity(qtyIncrease.getAttribute("data-qty-increase"), 1);
+      return;
+    }
+
+    const qtyDecrease = event.target.closest("[data-qty-decrease]");
+    if (qtyDecrease) {
+      changeCartQuantity(qtyDecrease.getAttribute("data-qty-decrease"), -1);
+      return;
+    }
+
+    const removeBtn = event.target.closest("[data-remove-from-cart]");
+    if (removeBtn) {
+      removeFromCart(removeBtn.getAttribute("data-remove-from-cart"));
+      return;
+    }
+
+    const categoryTarget = event.target.closest("[data-category-id]");
+    if (categoryTarget) {
+      event.preventDefault();
+      selectCategory(categoryTarget.getAttribute("data-category-id"));
+      return;
+    }
+
+    const galleryThumb = event.target.closest("[data-gallery-index]");
+    if (galleryThumb) {
+      activeGalleryIndex = Number(galleryThumb.getAttribute("data-gallery-index")) || 0;
+      const product = getProductById(activeModalProductId);
+      if (product) renderModalBody(product);
+      return;
+    }
+
+    const resetBtn = event.target.closest("#resetFiltersBtn");
+    if (resetBtn) { resetFilters(); return; }
+
+    const retryBtn = event.target.closest("#retryLoadBtn");
+    if (retryBtn) { retryLoad(); return; }
+
+    const productCard = event.target.closest(".product-card[data-product-id]");
+    if (productCard) {
+      openProductModal(productCard.getAttribute("data-product-id"));
+      return;
+    }
+  });
+
+  const searchInput = $("searchInput");
+  if (searchInput) {
+    searchInput.addEventListener("input", function(event){
+      currentSearch = event.target.value || "";
+      renderProductsGrid();
+    });
+  }
+
+  const sortSelect = $("sortSelect");
+  if (sortSelect) sortSelect.addEventListener("change", renderProductsGrid);
+
+  const cartBtn = $("cartBtn");
+  if (cartBtn) cartBtn.addEventListener("click", openCart);
+
+  const cartCloseBtn = $("cartCloseBtn");
+  if (cartCloseBtn) cartCloseBtn.addEventListener("click", closeCart);
+
+  const cartOverlay = $("cartOverlay");
+  if (cartOverlay) cartOverlay.addEventListener("click", function(e){ if (e.target === cartOverlay) closeCart(); });
+
+  const checkoutBtn = $("checkoutBtn");
+  if (checkoutBtn) checkoutBtn.addEventListener("click", checkoutWhatsApp);
+
+  const clearCartBtn = $("clearCartBtn");
+  if (clearCartBtn) clearCartBtn.addEventListener("click", clearCart);
+
+  const wishlistBtn = $("wishlistBtn");
+  if (wishlistBtn) wishlistBtn.addEventListener("click", openWishlist);
+
+  const wishlistCloseBtn = $("wishlistCloseBtn");
+  if (wishlistCloseBtn) wishlistCloseBtn.addEventListener("click", closeWishlist);
+
+  const wishlistOverlay = $("wishlistOverlay");
+  if (wishlistOverlay) wishlistOverlay.addEventListener("click", function(e){ if (e.target === wishlistOverlay) closeWishlist(); });
+
+  const modalCloseBtn = $("modalCloseBtn");
+  if (modalCloseBtn) modalCloseBtn.addEventListener("click", closeProductModal);
+
+  const modalOverlay = $("productModalOverlay");
+  if (modalOverlay) modalOverlay.addEventListener("click", function(e){ if (e.target === modalOverlay) closeProductModal(); });
+
+  const heroShopBtn = $("heroShopBtn");
+  if (heroShopBtn) heroShopBtn.addEventListener("click", function(){
+    const section = $("productsSection");
+    if (section) section.scrollIntoView({ behavior:"smooth", block:"start" });
+  });
+
+  const footerShopLink = $("footerShopLink");
+  if (footerShopLink) footerShopLink.addEventListener("click", function(event){
+    event.preventDefault();
+    const section = $("productsSection");
+    if (section) section.scrollIntoView({ behavior:"smooth", block:"start" });
+  });
+
+  const brandHome = $("brandHome");
+  if (brandHome) brandHome.addEventListener("click", function(event){
+    event.preventDefault();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  document.addEventListener("keydown", function(event){
+    if (event.key === "Escape") {
+      closeProductModal();
+      closeCart();
+      closeWishlist();
+    }
+  });
+}
+
+/* ============================================================
+   INIT
+============================================================ */
+async function init(){
+  buildHeroTitle();
+
+  cart = loadCartFromStorage();
+  wishlist = loadWishlistFromStorage();
+
+  renderCategoryNav();
+  renderCategoryGrid();
+  renderCartDrawer();
+  updateCartBadge();
+  updateWishlistBadge();
+
+  setupEventDelegation();
+  setupNewsletter();
+
+  if (!supabaseClient) {
+    showDatabaseError(new Error("Supabase client could not be initialized."));
+    return;
+  }
+
+  try {
+    await loadCategories();
+    await loadProducts();
+  } catch (err) {
+    showDatabaseError(err);
+  }
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", init);
+} else {
+  init();
+}
+
+})();
+</script>
+</body>
+</html>
+
